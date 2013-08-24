@@ -37,7 +37,13 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
             ignore       : "file7_ignorable.rb",
             basePath     : baseProc
         },
-        "plugins/c9.fs/vfs",
+        {
+            packagePath: "plugins/c9.vfs.client/vfs_client",
+            smithIo     : {
+                "prefix": "/smith.io/server"
+            }
+        },
+        "plugins/c9.ide.auth/auth",
         "plugins/c9.fs/fs",
         "plugins/c9.fs/proc",
         
