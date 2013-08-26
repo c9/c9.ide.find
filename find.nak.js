@@ -11,10 +11,11 @@ define(function(require, exports, module) {
 
     function main(options, imports, register) {
         var Plugin   = imports.plugin;
+        var c9       = imports.c9;
         var prefs    = imports.preferences;
         var proc     = imports.proc;
         var fs       = imports.fs;
-        
+
         var PATH     = imports.nodeapi.path;
         
         /***** Initialization *****/
@@ -27,23 +28,23 @@ define(function(require, exports, module) {
             + "\n" + (options.ignore || "");
         const IGNORE      = options.ignore;
         
-        const NAK = options.nak || "~/.c9/node_modules/nak/bin/nak";
+        const NAK = options.nak || PATH.join(c9.home, "/.c9/node_modules/nak/bin/nak");
         
         function install(callback, progress){
             // Check if nak is already installed
-            fs.exists("~/.c9/node_modules/nak/bin/nak", function(exists) {
+            fs.exists(NAK, function(exists) {
                 if (exists)
                     return callback();
             
                 progress("Installing nak");
                         
                 // Create node_modules
-                fs.mkdirP("~/.c9/node_modules", function(){
+                fs.mkdirP(PATH.join(c9.home, "/.c9/node_modules"), function(){
                     
                     // Install nak
                     proc.spawn("npm", {
                         args : ["install", "nak"],
-                        cwd  : "~/.c9"
+                        cwd  : PATH.join(c9.home, "/.c9")
                     }, function(err, process){
                         if (err) return callback(err);
                         
@@ -272,7 +273,7 @@ define(function(require, exports, module) {
              *   wholeword      {Boolean} whether to match the `query` as a whole word.
              *   hidden         {String}  include files starting with a dott. Defaults to false.
              *   regexp         {String}  whether the `query` is a regular expression.
-             *   pattern        {String}  specify what files/dirs to include 
+             *   pattern        {String}  specify what files/dirs to include
              *      and exclude. Prefix the words with minus '-' to exclude.
              *   replaceAll     {Boolean} whether to replace the found matches
              *   replacement    {String}  the string to replace the found matches with
