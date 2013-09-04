@@ -23,13 +23,14 @@ define(function(require, exports, module) {
         var plugin = new Plugin("Ajax.org", main.consumes);
         // var emit   = plugin.getEmitter();
         
-        const MAIN_IGNORE = "/.c9/.nakignore";
-        const TEMPLATE    = require("text!./nakignore-template") 
+        var MAIN_IGNORE = "/.c9/.nakignore";
+        var TEMPLATE    = require("text!./nakignore-template") 
             + "\n" + (options.ignore || "");
-        const IGNORE      = options.ignore;
-        
-        const NAK = options.nak || PATH.join(c9.home, "/.c9/node_modules/nak/bin/nak");
-        
+
+        var IGNORE      = options.ignore;
+
+        var NAK = options.nak || PATH.join(c9.home, "/.c9/node_modules/nak/bin/nak");
+
         function install(callback, progress){
             // Check if nak is already installed
             fs.exists(NAK, function(exists) {
