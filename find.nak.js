@@ -24,12 +24,12 @@ define(function(require, exports, module) {
         // var emit   = plugin.getEmitter();
         
         var MAIN_IGNORE = "/.c9/.nakignore";
-        var TEMPLATE    = require("text!./nakignore-template") 
+        var TEMPLATE    = require("text!./nakignore-template")
             + "\n" + (options.ignore || "");
 
         var IGNORE      = options.ignore;
 
-        var NAK = options.nak || PATH.join(c9.home, "/.c9/node_modules/nak/bin/nak");
+        var NAK = options.nak || "~/.c9/node_modules/nak/bin/nak";
 
         function install(callback, progress){
             // Check if nak is already installed
@@ -40,12 +40,12 @@ define(function(require, exports, module) {
                 progress("Installing nak");
                         
                 // Create node_modules
-                fs.mkdirP(PATH.join(c9.home, "/.c9/node_modules"), function(){
+                fs.mkdirP("~/.c9/node_modules", function(){
                     
                     // Install nak
                     proc.spawn("npm", {
                         args : ["install", "nak"],
-                        cwd  : PATH.join(c9.home, "/.c9")
+                        cwd  : "~/.c9"
                     }, function(err, process){
                         if (err) return callback(err);
                         
