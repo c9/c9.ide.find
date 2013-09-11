@@ -127,7 +127,7 @@ define(function(require, exports, module) {
              * This method tries to do intelligent caching by hooking into the
              * fs and watcher.
              * @param {Object}
-             options *   object:
+             options * @param {Object} e
              *   path           {String}  the path to search in (displayed in the results). Defaults to "".
              *   base           {String}  the base path to search in (is not displayed in the results when buffered). Defaults to the fs root.
              *   query          {String}  the text or regexp to match the file contents with
@@ -150,7 +150,7 @@ define(function(require, exports, module) {
             /**
              * Retrieves a list of files under a path
              * @param {Object}
-             options *   object:
+             options * @param {Object} e
              *   path     {String}  the path to search in (displayed in the results). Defaults to "".
              *   base     {String}  the base path to search in (is not displayed in the results when buffered). Defaults to the fs root.
              *   hidden   {Boolean} include files starting with a dott. Defaults to false.

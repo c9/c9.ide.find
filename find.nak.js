@@ -266,7 +266,7 @@ define(function(require, exports, module) {
             /**
              * Retrieves a list of files and lines that match a string or pattern
              * @param {Object}
-             options *   object:
+             options * @param {Object} e
              *   path           {String}  the path to search in (displayed in the results)
              *   base           {String}  the base path to search in (is not displayed in the results)
              *   query          {String}  the text or regexp to match the file contents with
@@ -287,7 +287,7 @@ define(function(require, exports, module) {
             /**
              * Retrieves a list of files under a path
              * @param {Object}
-             options *   object:
+             options * @param {Object} e
              *   path     {String}  the path to search in (displayed in the results)
              *   base     {String}  the base path to search in (is not displayed in the results)
              *   hidden   {Boolean} include files starting with a dott. Defaults to false.
