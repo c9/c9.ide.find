@@ -265,8 +265,8 @@ define(function(require, exports, module) {
         plugin.freezePublicAPI({
             /**
              * Retrieves a list of files and lines that match a string or pattern
-             * @param options {Object}
-             *   object:
+             * @param {Object}
+             options *   object:
              *   path           {String}  the path to search in (displayed in the results)
              *   base           {String}  the base path to search in (is not displayed in the results)
              *   query          {String}  the text or regexp to match the file contents with
@@ -286,8 +286,8 @@ define(function(require, exports, module) {
             
             /**
              * Retrieves a list of files under a path
-             * @param options {Object}
-             *   object:
+             * @param {Object}
+             options *   object:
              *   path     {String}  the path to search in (displayed in the results)
              *   base     {String}  the base path to search in (is not displayed in the results)
              *   hidden   {Boolean} include files starting with a dott. Defaults to false.
