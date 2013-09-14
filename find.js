@@ -1,11 +1,11 @@
 define(function(require, exports, module) {
-    main.consumes = ["plugin", "fs", "finder", "util"];
+    main.consumes = ["Plugin", "fs", "finder", "util"];
     main.provides = ["find"];
     return main;
 
     function main(options, imports, register) {
         var fs       = imports.fs;
-        var Plugin   = imports.plugin;
+        var Plugin   = imports.Plugin;
         var finder   = imports.finder;
         var util     = imports.util;
         
