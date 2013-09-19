@@ -113,7 +113,7 @@ define(function(require, exports, module) {
             
         });
         plugin.on("unload", function(){
-            loaded = false;
+            // loaded = false;
         });
         
         /***** Register and define API *****/
