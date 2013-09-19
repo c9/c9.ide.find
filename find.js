@@ -21,12 +21,6 @@ define(function(require, exports, module) {
         var queue      = [];
         var cached, cacheTime;
         
-        // var loaded = false;
-        // function load(){
-        //     if (loaded) return false;
-        //     loaded = true;
-        // }
-        
         /***** Methods *****/
         
         function getFileList(options, callback){
@@ -104,16 +98,16 @@ define(function(require, exports, module) {
         /***** Lifecycle *****/
         
         plugin.on("load", function(){
-            // load();
+
         });
         plugin.on("enable", function(){
-            
+
         });
         plugin.on("disable", function(){
-            
+
         });
         plugin.on("unload", function(){
-            // loaded = false;
+
         });
         
         /***** Register and define API *****/
