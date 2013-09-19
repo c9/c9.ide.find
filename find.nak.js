@@ -5,7 +5,7 @@
  * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
  */
 define(function(require, exports, module) {
-    main.consumes = ["plugin", "preferences", "ext", "fs", "proc", "nodeapi"];
+    main.consumes = ["plugin", "preferences", "ext", "fs", "proc"];
     main.provides = ["finder"];
     return main;
 
@@ -15,7 +15,7 @@ define(function(require, exports, module) {
         var proc     = imports.proc;
         var fs       = imports.fs;
         
-        var PATH     = imports.nodeapi.path;
+        var PATH     = require("path");
         
         /***** Initialization *****/
         
