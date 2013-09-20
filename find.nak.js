@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
-    main.consumes = ["Plugin", "preferences", "ext", "fs", "proc", "nodeapi"];
+    "use strict";
+    
+    main.consumes = ["Plugin", "preferences", "ext", "fs", "proc"];
     main.provides = ["finder"];
     return main;
 
@@ -9,8 +11,8 @@ define(function(require, exports, module) {
         var prefs    = imports.preferences;
         var proc     = imports.proc;
         var fs       = imports.fs;
-
-        var PATH     = imports.nodeapi.path;
+        
+        var PATH     = require("path");
         
         /***** Initialization *****/
         

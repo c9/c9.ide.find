@@ -95,13 +95,13 @@ define(function(require, exports, module) {
         /***** Lifecycle *****/
         
         plugin.on("load", function(){
-            // load();
+
         });
         plugin.on("enable", function(){
-            
+
         });
         plugin.on("disable", function(){
-            
+
         });
         plugin.on("unload", function(){
         });
