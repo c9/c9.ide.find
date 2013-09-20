@@ -5,6 +5,8 @@
  * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
  */
 define(function(require, exports, module) {
+    "use strict";
+    
     main.consumes = ["plugin", "preferences", "ext", "fs", "proc"];
     main.provides = ["finder"];
     return main;
