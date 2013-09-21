@@ -1,18 +1,12 @@
-/**
- * File Finder module for the Cloud9 IDE that uses nak
- *
- * @copyright 2012, Ajax.org B.V.
- * @license GPLv3 <http://www.gnu.org/licenses/gpl.txt>
- */
 define(function(require, exports, module) {
     "use strict";
     
-    main.consumes = ["plugin", "preferences", "ext", "fs", "proc"];
+    main.consumes = ["Plugin", "preferences", "ext", "fs", "proc"];
     main.provides = ["finder"];
     return main;
 
     function main(options, imports, register) {
-        var Plugin   = imports.plugin;
+        var Plugin   = imports.Plugin;
         var c9       = imports.c9;
         var prefs    = imports.preferences;
         var proc     = imports.proc;
@@ -262,44 +256,42 @@ define(function(require, exports, module) {
         /***** Register and define API *****/
         
         /**
-         * Finder implementation using nak
+         * Finder implementation using [nak](https://github.com/gjtorikian/nak). 
+         * This plugin is used solely by the {@link find} plugin. If you want to
+         * create your own search implementation, re-implement this plugin.
+         * @singleton
          **/
         plugin.freezePublicAPI({
             /**
              * Retrieves a list of files and lines that match a string or pattern
-             * @param options {Object}
-             *   object:
-             *   path           {String}  the path to search in (displayed in the results)
-             *   base           {String}  the base path to search in (is not displayed in the results)
-             *   query          {String}  the text or regexp to match the file contents with
-             *   casesensitive  {Boolean} whether to match on case or not. Default is false;
-             *   wholeword      {Boolean} whether to match the `query` as a whole word.
-             *   hidden         {String}  include files starting with a dott. Defaults to false.
-             *   regexp         {String}  whether the `query` is a regular expression.
-             *   pattern        {String}  specify what files/dirs to include
+             * @param {Object}   options 
+             * @param {String}   options.path             the path to search in (displayed in the results)
+             * @param {String}   [options.base]           the base path to search in (is not displayed in the results)
+             * @param {String}   [options.query]          the text or regexp to match the file contents with
+             * @param {Boolean}  [options.casesensitive]  whether to match on case or not. Default is false;
+             * @param {Boolean}  [options.wholeword]      whether to match the `query` as a whole word.
+             * @param {String}   [options.hidden]         include files starting with a dott. Defaults to false.
+             * @param {String}   [options.regexp]         whether the `query` is a regular expression.
+             * @param {String}   [options.pattern]        specify what files/dirs to include
              *      and exclude. Prefix the words with minus '-' to exclude.
-             *   replaceAll     {Boolean} whether to replace the found matches
-             *   replacement    {String}  the string to replace the found matches with
-             * @param callback(err, results) {Function} called when the results come in
-             *   err     {Error}
-             *   results {String}
+             * @param {Boolean}  [options.replaceAll]     whether to replace the found matches
+             * @param {String}   [options.replacement]    the string to replace the found matches with
+             * @param {Function} callback                 called when the results come in
+             * @param {Error}    callback.err     
+             * @param {Stream}   callback.results 
              */
             find : find,
             
             /**
              * Retrieves a list of files under a path
-             * @param options {Object}
-             *   object:
-             *   path     {String}  the path to search in (displayed in the results)
-             *   base     {String}  the base path to search in (is not displayed in the results)
-             *   hidden   {Boolean} include files starting with a dott. Defaults to false.
-             *   maxdepth {Number}  maximum amount of parents a file can have.
-             * @param callback(err, results) {Function} called when the results come in
-             *   err     {Error}
-             *   results {Object}
-             *     data      {String}
-             *     count     {Number}
-             *     filecount {Number}
+             * @param {Object}   options
+             * @param {String}   [options.path]     the path to search in (displayed in the results)
+             * @param {String}   [options.base]     the base path to search in (is not displayed in the results)
+             * @param {Boolean}  [options.hidden]   include files starting with a dott. Defaults to false.
+             * @param {Number}   [options.maxdepth] maximum amount of parents a file can have.
+             * @param {Function} callback called when the results come in
+             * @param {Error}    callback.err     
+             * @param {Stream}   callback.results 
              */
             list : list
         });

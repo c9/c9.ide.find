@@ -1,11 +1,10 @@
 define(function(require, exports, module) {
-    main.consumes = ["plugin", "fs", "finder", "util"];
+    main.consumes = ["Plugin", "finder", "util"];
     main.provides = ["find"];
     return main;
 
     function main(options, imports, register) {
-        var fs       = imports.fs;
-        var Plugin   = imports.plugin;
+        var Plugin   = imports.Plugin;
         var finder   = imports.finder;
         var util     = imports.util;
         
@@ -13,8 +12,6 @@ define(function(require, exports, module) {
         
         var plugin = new Plugin("Ajax.org", main.consumes);
         // var emit   = plugin.getEmitter();
-        
-        plugin.__defineGetter__("basePath", function(){ return basePath; });
         
         var basePath   = options.basePath;
         var retrieving = false;
@@ -107,54 +104,87 @@ define(function(require, exports, module) {
 
         });
         plugin.on("unload", function(){
-
         });
         
         /***** Register and define API *****/
         
         /**
-         * Finds or lists files and/or lines based on their filename or contents
-         **/
+         * Finds or lists files and/or lines based on their filename or contents.
+         * 
+         * Example of getting a list of all the files in folder:
+         * 
+         *     find.getFileList({
+         *         path   : "/",
+         *         hidden : false,
+         *         buffer : true
+         *     }, function(err, result){
+         *         if (err) throw err;
+         *         console.log(result);
+         *     });
+         * 
+         * Example of searching for a keyword in all javascript files in a 
+         * certain path, excluding _test.js files.
+         * 
+         *     find.findFiles({
+         *         path    : "/",
+         *         query   : "var basepath",
+         *         hidden  : false,
+         *         pattern : "*.js,-*_test.js",
+         *         buffer  : true
+         *     }, function(err, result){
+         *         if (err) throw err;
+         *         console.log(result);
+         *     })
+         * 
+         * @singleton
+         */
         plugin.freezePublicAPI({
+            
+            /**
+             * @ignore
+             */
+            get basePath(){ return basePath; },
+            
             /**
              * Retrieves a list of files and lines that match a string or pattern
              * This method tries to do intelligent caching by hooking into the
              * fs and watcher.
-             * @param options {Object}
-             *   object:
-             *   path           {String}  the path to search in (displayed in the results). Defaults to "".
-             *   base           {String}  the base path to search in (is not displayed in the results when buffered). Defaults to the fs root.
-             *   query          {String}  the text or regexp to match the file contents with
-             *   casesensitive  {Boolean} whether to match on case or not. Default is false;
-             *   wholeword      {Boolean} whether to match the `pattern` as a whole word.
-             *   hidden         {String}  include files starting with a dott. Defaults to false.
-             *   regexp         {String}  whether the `pattern` is a regular expression.
-             *   pattern        {String}  specify what files/dirs to include 
-             *      and exclude. Prefix the words with minus '-' to exclude.
-             *   replaceAll     {Boolean} whether to replace the found matches
-             *   replacement    {String}  the string to replace the found matches with
-             *   buffer         {Boolean} whether to buffer the request. This changes 
+             * @param {Object}  options 
+             * @param {String}  options.path              The path to search in (displayed in the results). Defaults to "".
+             * @param {String}  [options.base]            The base path to search in (is not displayed in the results when buffered). Defaults to the fs root.
+             * @param {String}  options.query             The text or regexp to match the file contents with
+             * @param {Boolean} [options.casesensitive]   Specifies whether to match on case or not. Default is false;
+             * @param {Boolean} [options.wholeword]       Specifies whether to match the `pattern` as a whole word.
+             * @param {String}  [options.hidden]          Specifies whether to include files starting with a dott. Defaults to false.
+             * @param {String}  [options.regexp]          Specifies whether the `pattern` is a regular expression.
+             * @param {String}  [options.pattern]         Specify what files/dirs to include 
+             *      and exclude. Separate with a "," and prefix the words with minus '-' to exclude.
+             * @param {Boolean} [options.replaceAll]      Specifies whether to replace the found matches
+             * @param {String}  [options.replacement]     The string to replace the found matches with
+             * @param {Boolean} [options.buffer]          Specifies whether to buffer the request. This changes 
              *      what is returned in the callback to a string instead of a stream.
-             * @param callback(err, results) {Function} called when the results come in
-             *   err     {Error}
-             *   results {Stream|String}
+             * @param {Function}        callback          Called when the results come in
+             * @param {Error}           callback.err      The error object if an error has occured.
+             * @param {Stream/String}   callback.results  The search results 
+             *   are a string when `options.buffer` is set to true, otherwise 
+             *   it is a stream.
              */
             findFiles : findFiles,
             
             /**
              * Retrieves a list of files under a path
-             * @param options {Object}
-             *   object:
-             *   path     {String}  the path to search in (displayed in the results). Defaults to "".
-             *   base     {String}  the base path to search in (is not displayed in the results when buffered). Defaults to the fs root.
-             *   hidden   {Boolean} include files starting with a dott. Defaults to false.
-             *   maxdepth {Number}  maximum amount of parents a file can have.
-             *   nocache  {Boolean} ignore the cache
-             *   buffer   {Boolean} whether to buffer the request. This changes 
-             *      what is returned in the callback to a string instead of a stream.
-             * @param callback(err, results) {Function} called when the results come in
-             *   err     {Error}
-             *   results {Stream|String}
+             * @param {Object}  options
+             * @param {String}  options.path            The path to search in (displayed in the results). Defaults to "".
+             * @param {String}  [options.base]          The base path to search in (is not displayed in the results when buffered). Defaults to the fs root.
+             * @param {Boolean} [options.hidden]        Specifies whether to include files starting with a dott. Defaults to false.
+             * @param {Number}  [options.maxdepth]      The maximum amount of parents a file can have.
+             * @param {Boolean} [options.nocache]       Specifies whether to ignore the cache
+             * @param {Boolean} [options.buffer]        Specifies whether to buffer the request. This changes what is returned in the callback to a string instead of a stream.
+             * @param {Function}      callback          Called when the results come in
+             * @param {Error}         callback.err      The error object if an error has occured.
+             * @param {Stream/String} callback.results  The search results 
+             *   are a string when `options.buffer` is set to true, otherwise 
+             *   it is a stream.
              */
             getFileList : getFileList
         });
