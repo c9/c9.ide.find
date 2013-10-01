@@ -278,7 +278,7 @@ define(function(require, exports, module) {
              * @param {String}   [options.replacement]    the string to replace the found matches with
              * @param {Function} callback                 called when the results come in
              * @param {Error}    callback.err     
-             * @param {Stream}   callback.results 
+             * @param {proc.Stream}   callback.results 
              */
             find : find,
             
@@ -291,7 +291,7 @@ define(function(require, exports, module) {
              * @param {Number}   [options.maxdepth] maximum amount of parents a file can have.
              * @param {Function} callback called when the results come in
              * @param {Error}    callback.err     
-             * @param {Stream}   callback.results 
+             * @param {proc.Stream}   callback.results 
              */
             list : list
         });

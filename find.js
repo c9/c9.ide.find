@@ -165,7 +165,7 @@ define(function(require, exports, module) {
              *      what is returned in the callback to a string instead of a stream.
              * @param {Function}        callback          Called when the results come in
              * @param {Error}           callback.err      The error object if an error has occured.
-             * @param {Stream/String}   callback.results  The search results 
+             * @param {proc.Stream/String}   callback.results  The search results 
              *   are a string when `options.buffer` is set to true, otherwise 
              *   it is a stream.
              */
@@ -182,7 +182,7 @@ define(function(require, exports, module) {
              * @param {Boolean} [options.buffer]        Specifies whether to buffer the request. This changes what is returned in the callback to a string instead of a stream.
              * @param {Function}      callback          Called when the results come in
              * @param {Error}         callback.err      The error object if an error has occured.
-             * @param {Stream/String} callback.results  The search results 
+             * @param {proc.Stream/String} callback.results  The search results 
              *   are a string when `options.buffer` is set to true, otherwise 
              *   it is a stream.
              */
