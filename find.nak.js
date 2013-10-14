@@ -103,8 +103,8 @@ define(function(require, exports, module) {
                }
             }, plugin);
             
-            prefs.on("draw", function(){
-                var ta = plugin.getElement("txtPref").lastChild;
+            plugin.getElement("txtPref", function(txtPref){
+                var ta = txtPref.lastChild;
                 
                 ta.on("afterchange", function(e){
                     fs.writeFile(MAIN_IGNORE, "utf8", e.value, function(){});
