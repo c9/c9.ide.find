@@ -88,7 +88,6 @@ define(function(require, exports, module) {
             
             prefs.add({
                "General" : {
-                   position : 100,
                    "Find in Files" : {
                        position : 30,
                        "Ignore these files" : {
