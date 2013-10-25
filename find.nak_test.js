@@ -32,7 +32,8 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         {
             packagePath  : "plugins/c9.ide.find/find.nak",
             ignore       : "file7_ignorable.rb",
-            basePath     : baseProc
+            basePath     : baseProc,
+            testing      : true
         },
         "plugins/c9.vfs.client/vfs_client",
         "plugins/c9.vfs.client/endpoint",
@@ -44,7 +45,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         {
             consumes : ["ui"],
             provides : [
-                "preferences"
+                "preferences", "auth.bootstrap"
             ],
             setup    : expect.html.mocked
         },

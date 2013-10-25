@@ -116,6 +116,9 @@ define(function(require, exports, module) {
                     ta.setValue(data);
                 });
             }, plugin);
+            
+            if (options.testing)
+                plugin.install(function(){}, function(){});
         }
         
         /***** Methods *****/
@@ -123,7 +126,7 @@ define(function(require, exports, module) {
         function assembleFilelistCommand(options) {
             var args;
     
-            args = ["-l"]; //, "-a", MAIN_IGNORE]; // -l = filenames only
+            args = ["-l", "-a", MAIN_IGNORE]; // -l = filenames only
             
             if (options.hidden)
                 args.push("-H");
@@ -142,7 +145,7 @@ define(function(require, exports, module) {
             if (!query)
                 return;
     
-            args = []; //"-a", MAIN_IGNORE];
+            args = ["-a", MAIN_IGNORE];
     
             if (!options.casesensitive)
                 args.push("-i");
@@ -170,7 +173,7 @@ define(function(require, exports, module) {
                         includes.push(p);
                 });
             }
-                
+            
             if (IGNORE)
                 excludes.push(IGNORE);
 
