@@ -186,7 +186,7 @@ define(function(require, exports, module) {
     
             args.push(query);
     
-            if (options.replaceAll && options.replacement)
+            if (options.replaceAll)
                 args.push(options.replacement);
             
             args.push(options.path);
