@@ -45,7 +45,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         
         // Mock plugins
         {
-            consumes : ["ui"],
+            consumes : ["ui", "Plugin"],
             provides : [
                 "preferences", "auth.bootstrap"
             ],
