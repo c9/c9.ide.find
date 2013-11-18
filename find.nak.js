@@ -124,41 +124,42 @@ define(function(require, exports, module) {
         /***** Methods *****/
         
         function assembleFilelistCommand(options) {
-            var args;
-    
-            args = ["-l", "-a", MAIN_IGNORE]; // -l = filenames only
+            var args = {list: true};
+            
+            args.pathToNakignore = MAIN_IGNORE;
             
             if (options.hidden)
-                args.push("-H");
-                
+                args.hidden = true;
+            
+            // TODO this isn't supported in nak yet    
             if (options.maxdepth)
-                args.push("-m", options.maxdepth);
+                args.maxdepth = options.maxdepth;
                 
-            args.push(options.path);
+            args.path = options.path;
     
-            return args;
+            return ["--json", JSON.stringify(args)];
         }
     
         function assembleSearchCommand(options) {
-            var args, query = options.query;
+            var args = {};
     
-            if (!query)
+            if (!options.query)
                 return;
     
-            args = ["-a", MAIN_IGNORE];
+            args.pathToNakignore = MAIN_IGNORE;
     
             if (!options.casesensitive)
-                args.push("-i");
+                args.ignoreCase = true;
     
             if (options.wholeword)
-                args.push("-w");
+                args.wordRegexp = true;
     
             if (options.hidden)
-                args.push("-H");
+                args.hidden = true;
                 
             if (!options.regexp)
-                args.push("-q");
-    
+                args.literal = true;
+                
             var includes = [], excludes = [];
     
             if (options.pattern) {
@@ -179,19 +180,19 @@ define(function(require, exports, module) {
 
             // wildcard handling will be done in nak
             if (includes.length)
-                args.push("-G", includes.join(", "));
+                args.pathInclude = includes.join(", ");
 
             if (excludes.length)
-                args.push("--ignore", excludes.join(", "));
+                args.ignore = includes.join(", ");
     
-            args.push(query);
+            args.query = options.query;
     
             if (options.replaceAll)
-                args.push(options.replacement);
+                args.replacement = options.replacement;
             
-            args.push(options.path);
+            args.path = options.path;
             
-            return args;
+            return ["--json", JSON.stringify(args)];
         }
         
         function list(options, callback){
@@ -236,7 +237,7 @@ define(function(require, exports, module) {
                 if (err)
                     return callback(err);
                 
-                callback(null, { stream: process.stdout })
+                callback(null, { stream: process.stdout });
             });
         }
         
