@@ -40,12 +40,11 @@ define(function(require, exports, module) {
                 if (!err) {
                     cacheTime  = new Date();
                 }
-                retrieving = false;
 
                 var needsBuffer = [];
                 queue.forEach(function(iter){
                     if (err || !iter[0].buffer)
-                        iter[1](err, stream) 
+                        iter[1](err, stream);
                     else
                         needsBuffer.push(iter[1]);
                 });
@@ -58,9 +57,10 @@ define(function(require, exports, module) {
                     cached += lines;
                 });
                 stream.on("end", function(){
+                    retrieving = false;
                     if (options.base && options.base != "/") {
                         var rgx = new RegExp(util.escapeRegExp(options.base), "g");
-                        cached  = cached.replace(rgx, "").replace(/\\/g, "/")
+                        cached  = cached.replace(rgx, "").replace(/\\/g, "/");
                     }
                     
                     needsBuffer.forEach(function(cb){
