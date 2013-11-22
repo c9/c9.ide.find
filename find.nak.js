@@ -143,9 +143,6 @@ define(function(require, exports, module) {
         function assembleSearchCommand(options) {
             var args = {};
     
-            if (!options.query)
-                return;
-    
             args.pathToNakignore = MAIN_IGNORE;
     
             if (!options.casesensitive)
