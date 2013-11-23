@@ -180,7 +180,7 @@ define(function(require, exports, module) {
                 args.pathInclude = includes.join(", ");
 
             if (excludes.length)
-                args.ignore = includes.join(", ");
+                args.ignore = excludes.join(", ");
     
             args.query = options.query;
     
