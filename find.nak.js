@@ -27,60 +27,6 @@ define(function(require, exports, module) {
 
         var NAK = options.nak || "~/.c9/node_modules/nak/bin/nak";
 
-        function install(callback, progress){
-            // Check if nak is already installed
-            fs.exists(NAK, function(exists) {
-                if (exists)
-                    return callback();
-            
-                progress("Installing nak");
-                        
-                // Create node_modules
-                fs.mkdirP("~/.c9/node_modules", function(){
-                    
-                    // Install nak
-                    proc.spawn("npm", {
-                        args : ["install", "nak"],
-                        cwd  : "~/.c9"
-                    }, function(err, process){
-                        if (err) return callback(err);
-                        
-                        var success = false;
-                        process.stderr.on("data", function(chunk){
-                            progress(chunk, true, true);
-                        });
-                        
-                        process.stdout.on("data", function(chunk){
-                            success = success || chunk.match(/nak@[\d\.]+/);
-                            progress(chunk, true);
-                        });
-                        
-                        process.stdout.on("end", function(){
-                            if (!success)
-                                return callback(new Error("Could not install nak"));
-                            
-                            progress("Setting up nak ignore file");
-                            
-                            // Set up nakignore
-                            fs.exists(MAIN_IGNORE, function(exists){
-                                if (!exists) {
-                                    fs.mkdir("/.c9", function(err){
-                                        if (err) return callback(err);
-                                        
-                                        fs.writeFile(MAIN_IGNORE, TEMPLATE, function(err){
-                                            callback(err);
-                                        });
-                                    });
-                                }
-                                else
-                                    callback();
-                            });
-                        });
-                    });
-                });
-            });
-        }
-        
         var loaded = false;
         function load(callback){
             if (loaded) return;
@@ -116,9 +62,6 @@ define(function(require, exports, module) {
                     ta.setValue(data);
                 });
             }, plugin);
-            
-            if (options.testing)
-                plugin.install(function(){}, function(){});
         }
         
         /***** Methods *****/
@@ -239,11 +182,6 @@ define(function(require, exports, module) {
         }
         
         /***** Lifecycle *****/
-        
-        plugin.on("install", function(e){
-            install(e.next, e.progress);
-            return false;
-        });
         
         plugin.on("load", function(){
             load();
