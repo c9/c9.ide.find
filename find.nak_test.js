@@ -27,7 +27,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         "plugins/c9.ide.ui/lib_apf",
         "plugins/c9.ide.ui/ui",
         "plugins/c9.core/settings",
-        "plugins/c9.ide.api/api.js",
+        "plugins/c9.core/api.js",
         {
             packagePath  : "plugins/c9.ide.find/find",
             basePath     : baseProc
