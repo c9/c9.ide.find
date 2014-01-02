@@ -74,9 +74,9 @@ define(function(require, exports, module) {
             if (!options.base)
                 options.base = basePath;
             
-            finder.find(options, function(err, stream){
+            finder.find(options, function(err, stream, process){
                 if (err || !options.buffer)
-                    return callback(err, stream);
+                    return callback(err, stream, process);
                 
                 var buffer = "";
                 stream.on("data", function(lines){
