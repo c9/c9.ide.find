@@ -49,7 +49,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         {
             consumes : ["ui", "Plugin"],
             provides : [
-                "preferences", "auth.bootstrap", "info"
+                "preferences", "auth.bootstrap", "info", "dialog.error"
             ],
             setup    : expect.html.mocked
         },
