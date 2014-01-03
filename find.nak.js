@@ -146,8 +146,8 @@ define(function(require, exports, module) {
             if (!args)
                 return callback(new Error("Invalid Arguments"));
             
-            execute(args, function(err, stream, process){
-                callback(err, stream, process);
+            execute(args, function(err, stdout, stderr, process){
+                callback(err, stdout, stderr, process);
             });
         }
         
@@ -165,8 +165,8 @@ define(function(require, exports, module) {
             // if (this.activeProcess)
             //     this.activeProcess.kill("SIGKILL");
                 
-            execute(args, function(err, stream, process){
-                callback(err, stream, process);
+            execute(args, function(err, stdout, stderr, process){
+                callback(err, stdout, stderr, process);
             });
         }
         
@@ -177,7 +177,7 @@ define(function(require, exports, module) {
                 if (err)
                     return callback(err);
                 
-                callback(null, process.stdout, process);
+                callback(null, process.stdout, process.stderr, process);
             });
         }
         
