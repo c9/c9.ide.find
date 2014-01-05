@@ -142,7 +142,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                 });
                 stream.on("end", function(data){
                     callback(buf, data);
-                })
+                });
             }
             
             describe("list", function(){

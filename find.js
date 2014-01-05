@@ -36,7 +36,7 @@ define(function(require, exports, module) {
             cached     = "";
             retrieving = true;
             
-            finder.list(options, function(err, stream) {
+            finder.list(options, function(err, stdout, stderr, process) {
                 if (!err) {
                     cacheTime  = new Date();
                 }
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
                 var needsBuffer = [];
                 queue.forEach(function(iter){
                     if (err || !iter[0].buffer)
-                        iter[1](err, stream);
+                        iter[1](err, stderr);
                     else
                         needsBuffer.push(iter[1]);
                 });
@@ -53,18 +53,26 @@ define(function(require, exports, module) {
                 if (err || !needsBuffer) return;
                 
                 cached = "";
-                stream.on("data", function(lines){
+                stdout.on("data", function(lines) {
                     cached += lines;
                 });
-                stream.on("end", function(){
+                var errCached = "";
+                stderr.on("data", function(lines) {
+                    errCached += lines;
+                });
+                
+                process.on("exit", function(code) {
                     retrieving = false;
                     if (options.base && options.base != "/") {
                         var rgx = new RegExp(util.escapeRegExp(options.base), "g");
                         cached  = cached.replace(rgx, "").replace(/\\/g, "/");
                     }
                     
-                    needsBuffer.forEach(function(cb){
-                        cb(null, cached);
+                    needsBuffer.forEach(function(cb) {
+                        cb(
+                            code ? "Error " + code + "\n" + errCached : null,
+                            cached
+                        );
                     });
                 });
             });
@@ -74,20 +82,28 @@ define(function(require, exports, module) {
             if (!options.base)
                 options.base = basePath;
             
-            finder.find(options, function(err, stream, process){
+            finder.find(options, function(err, stdout, stderr, process) {
                 if (err || !options.buffer)
-                    return callback(err, stream, process);
+                    return callback(err, stdout, process);
                 
                 var buffer = "";
-                stream.on("data", function(lines){
+                stdout.on("data", function(lines){
                     buffer += lines;
                 });
-                stream.on("end", function(){
+                var stderrBuffer = "";
+                stderr.on("data", function(lines) {
+                    stderrBuffer += lines;
+                });
+                
+                process.on("exit", function(code) {
                     if (options.base && options.base != "/") {
                         var rgx = new RegExp(util.escapeRegExp(options.base), "g");
                         buffer = buffer.replace(rgx, "").replace(/\\/g, "/");
                     }
-                    callback(null, buffer);
+                    callback(
+                        code ? "Error " + code + "\n" + stderrBuffer : null,
+                        buffer
+                    );
                 });
             });
         }
