@@ -1,7 +1,9 @@
 define(function(require, exports, module) {
     "use strict";
     
-    main.consumes = ["Plugin", "preferences", "ext", "fs", "proc", "settings"];
+    main.consumes = [
+        "Plugin", "preferences", "ext", "fs", "proc", "settings", "vfs"
+    ];
     main.provides = ["finder"];
     return main;
 
@@ -10,6 +12,7 @@ define(function(require, exports, module) {
         var settings = imports.settings;
         var prefs    = imports.preferences;
         var proc     = imports.proc;
+        var vfs      = imports.vfs;
         var fs       = imports.fs;
         
         var PATH     = require("path");
@@ -19,11 +22,12 @@ define(function(require, exports, module) {
         var plugin = new Plugin("Ajax.org", main.consumes);
         // var emit   = plugin.getEmitter();
         
+        var USEHTTP     = options.useHttp || true;
         var IGNORE      = options.ignore;
         var MAIN_IGNORE = "/.c9/.nakignore";
         var TEMPLATE    = require("text!./nakignore-template")
             + "\n" + (options.ignore || "");
-        var NAK         = options.nak || "~/.c9/node_modules/nak/bin/nak";
+        var NAK         = options.nak || "~/.c9/node_modules/.bin/nak";
 
         var loaded = false;
         function load(callback){
@@ -75,7 +79,7 @@ define(function(require, exports, module) {
         function assembleFilelistCommand(options) {
             var args = {list: true};
             
-            args.pathToNakignore = MAIN_IGNORE;
+            args.pathToNakignore = PATH.join(options.base, MAIN_IGNORE);
             
             if (options.hidden)
                 args.hidden = true;
@@ -92,7 +96,7 @@ define(function(require, exports, module) {
         function assembleSearchCommand(options) {
             var args = {};
     
-            args.pathToNakignore = MAIN_IGNORE;
+            args.pathToNakignore = PATH.join(options.base, MAIN_IGNORE);
     
             if (!options.casesensitive)
                 args.ignoreCase = true;
@@ -148,13 +152,28 @@ define(function(require, exports, module) {
             if (!options.path)
                 return callback(new Error("Invalid Path"));
             
-            var args = assembleFilelistCommand(options);
-            if (!args)
-                return callback(new Error("Invalid Arguments"));
-            
-            execute(args, function(err, stdout, stderr, process){
-                callback(err, stdout, stderr, process);
-            });
+            if (USEHTTP && options.buffer) {
+                vfs.rest("~/.c9/file.listing", {
+                    method  : "GET",
+                    headers : {
+                        "x-nak-ignore" : PATH.join(options.base, MAIN_IGNORE),
+                        "x-nak-path"   : options.path,
+                        "x-nak-hidden" : String(options.hidden)
+                    },
+                    timeout : 120000
+                }, function(err, data, res){
+                    callback(err, data);
+                });
+            }
+            else {
+                var args = assembleFilelistCommand(options);
+                if (!args)
+                    return callback(new Error("Invalid Arguments"));
+                
+                execute(args, function(err, stdout, stderr, process){
+                    callback(err, stdout, stderr, process);
+                });
+            }
         }
         
         function find(options, callback){

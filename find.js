@@ -50,6 +50,12 @@ define(function(require, exports, module) {
                 });
                 queue = [];
                 
+                // We got the results pre-buffered
+                if (typeof stdout == "string") {
+                    done(err, stdout);
+                    return;
+                }
+                
                 if (err || !needsBuffer) return;
                 
                 cached = "";
@@ -62,19 +68,21 @@ define(function(require, exports, module) {
                 });
                 
                 process.on("exit", function(code) {
+                    done(
+                        code ? "Error " + code + "\n" + errCached : null, 
+                        cached
+                    )
+                });
+                
+                function done(err, data){
                     retrieving = false;
                     if (options.base && options.base != "/") {
                         var rgx = new RegExp(util.escapeRegExp(options.base), "g");
-                        cached  = cached.replace(rgx, "").replace(/\\/g, "/");
+                        cached  = data.replace(rgx, "").replace(/\\/g, "/");
                     }
                     
-                    needsBuffer.forEach(function(cb) {
-                        cb(
-                            code ? "Error " + code + "\n" + errCached : null,
-                            cached
-                        );
-                    });
-                });
+                    needsBuffer.forEach(function(cb){ cb(err, cached); });
+                }
             });
         }
         
