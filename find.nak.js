@@ -22,7 +22,7 @@ define(function(require, exports, module) {
         var plugin = new Plugin("Ajax.org", main.consumes);
         // var emit   = plugin.getEmitter();
         
-        var USEHTTP     = options.useHttp || true;
+        var USEHTTP     = options.useHttp;
         var IGNORE      = options.ignore;
         var MAIN_IGNORE = "/.c9/.nakignore";
         var TEMPLATE    = require("text!./nakignore-template")
