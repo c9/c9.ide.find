@@ -48,7 +48,7 @@ define(function(require, exports, module) {
             
             settings.on("read", function(){
                 if (!settings.getBool("state/nak/installed")) {
-                    fs.writeFile(MAIN_IGNORE, "utf8", TEMPLATE, function(){
+                    fs.writeFile(MAIN_IGNORE, TEMPLATE, function(){
                         settings.set("state/nak/installed", true);
                     });
                 }
@@ -58,7 +58,7 @@ define(function(require, exports, module) {
                 var ta = txtPref.lastChild;
                 
                 ta.on("afterchange", function(e){
-                    fs.writeFile(MAIN_IGNORE, "utf8", e.value, function(){});
+                    fs.writeFile(MAIN_IGNORE, e.value, function(){});
                 });
                 
                 fs.readFile(MAIN_IGNORE, function(err, data){
