@@ -47,9 +47,9 @@ define(function(require, exports, module) {
             }, plugin);
             
             settings.on("read", function(){
-                if (!settings.getBool("state/nak/installed")) {
+                if (!settings.getBool("state/nak/@installed")) {
                     fs.writeFile(MAIN_IGNORE, TEMPLATE, function(){
-                        settings.set("state/nak/installed", true);
+                        settings.set("state/nak/@installed", true);
                     });
                 }
             });
