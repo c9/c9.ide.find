@@ -1,13 +1,13 @@
 define(function(require, exports, module) {
     "use strict";
     
-    main.consumes = ["Plugin", "preferences", "ext", "fs", "proc"];
+    main.consumes = ["Plugin", "preferences", "ext", "fs", "proc", "settings"];
     main.provides = ["finder"];
     return main;
 
     function main(options, imports, register) {
         var Plugin   = imports.Plugin;
-        var c9       = imports.c9;
+        var settings = imports.settings;
         var prefs    = imports.preferences;
         var proc     = imports.proc;
         var fs       = imports.fs;
@@ -19,13 +19,11 @@ define(function(require, exports, module) {
         var plugin = new Plugin("Ajax.org", main.consumes);
         // var emit   = plugin.getEmitter();
         
+        var IGNORE      = options.ignore;
         var MAIN_IGNORE = "/.c9/.nakignore";
         var TEMPLATE    = require("text!./nakignore-template")
             + "\n" + (options.ignore || "");
-
-        var IGNORE      = options.ignore;
-
-        var NAK = options.nak || "~/.c9/node_modules/nak/bin/nak";
+        var NAK         = options.nak || "~/.c9/node_modules/nak/bin/nak";
 
         var loaded = false;
         function load(callback){
@@ -47,6 +45,14 @@ define(function(require, exports, module) {
                    }
                }
             }, plugin);
+            
+            settings.on("read", function(){
+                if (!settings.getBool("state/nak/installed")) {
+                    fs.writeFile(MAIN_IGNORE, "utf8", TEMPLATE, function(){
+                        settings.set("state/nak/installed", true);
+                    });
+                }
+            });
             
             plugin.getElement("txtPref", function(txtPref){
                 var ta = txtPref.lastChild;
