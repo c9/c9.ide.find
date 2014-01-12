@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         var MAIN_IGNORE = "/.c9/.nakignore";
         var TEMPLATE    = require("text!./nakignore-template")
             + "\n" + (options.ignore || "");
-        var NAK         = options.nak || "~/.c9/node_modules/.bin/nak";
+        var NAK         = options.nak || "~/.c9/node_modules/nak/bin/nak";
 
         var loaded = false;
         function load(callback){
@@ -196,7 +196,8 @@ define(function(require, exports, module) {
         }
         
         function execute(args, callback){
-            proc.spawn(NAK, {
+            args.unshift(NAK);
+            proc.spawn("node", {
                 args: args
             }, function(err, process){
                 if (err)
