@@ -29,6 +29,9 @@ define(function(require, exports, module) {
             + "\n" + (options.ignore || "");
         var NAK         = options.nak || "~/.c9/node_modules/nak/bin/nak";
         var NODE        = options.node;
+        
+        if (NODE && Array.isArray(NODE)) 
+            NODE = NODE[0];
 
         var loaded = false;
         function load(callback){
