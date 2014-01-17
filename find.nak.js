@@ -93,6 +93,7 @@ define(function(require, exports, module) {
                 args.maxdepth = options.maxdepth;
                 
             args.path = options.path;
+            args.follow = true;
     
             return ["--json", JSON.stringify(args)];
         }
@@ -145,6 +146,7 @@ define(function(require, exports, module) {
                 args.replacement = options.replacement;
             
             args.path = options.path;
+            args.follow = true;
             
             return ["--json", JSON.stringify(args)];
         }
