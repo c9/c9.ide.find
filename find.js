@@ -36,8 +36,6 @@ define(function(require, exports, module) {
             if (emit("fileList", options) === false)
                 return callback(new Error("Cancelled"));
 
-            options.startPaths = ["/configs"];
-
             cached     = "";
             retrieving = true;
             
