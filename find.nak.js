@@ -91,9 +91,15 @@ define(function(require, exports, module) {
             // TODO this isn't supported in nak yet    
             if (options.maxdepth)
                 args.maxdepth = options.maxdepth;
+            
+            if (options.startPaths)
+                args.startPaths = options.startPaths;
                 
             args.path = options.path;
             args.follow = true;
+            
+            if (options.useHttp)
+                return args;
     
             return ["--json", JSON.stringify(args)];
         }
@@ -145,6 +151,9 @@ define(function(require, exports, module) {
             if (options.replaceAll)
                 args.replacement = options.replacement;
             
+            if (options.startPaths)
+                args.startPaths = options.startPaths;
+            
             args.path = options.path;
             args.follow = true;
             
@@ -154,28 +163,27 @@ define(function(require, exports, module) {
         function list(options, callback){
             options.uri  = options.path || "";
             options.path = PATH.join((options.base || ""), (options.path || ""));
+            options.useHttp = USEHTTP && options.buffer;
             
             if (!options.path)
                 return callback(new Error("Invalid Path"));
+            var args = assembleFilelistCommand(options);
+            if (!args)
+                return callback(new Error("Invalid Arguments"));
             
-            if (USEHTTP && options.buffer) {
+            if (options.useHttp) {
+                delete args.list;
+                delete args.follow;
+                
                 vfs.rest("~/.c9/file.listing", {
                     method  : "GET",
-                    headers : {
-                        "x-nak-ignore" : PATH.join(options.base, MAIN_IGNORE),
-                        "x-nak-path"   : options.path,
-                        "x-nak-hidden" : String(options.hidden)
-                    },
+                    query : args,
                     timeout : 120000
                 }, function(err, data, res){
                     callback(err, data);
                 });
             }
             else {
-                var args = assembleFilelistCommand(options);
-                if (!args)
-                    return callback(new Error("Invalid Arguments"));
-                
                 execute(args, function(err, stdout, stderr, process){
                     callback(err, stdout, stderr, process);
                 });

@@ -11,7 +11,7 @@ define(function(require, exports, module) {
         /***** Initialization *****/
         
         var plugin = new Plugin("Ajax.org", main.consumes);
-        // var emit   = plugin.getEmitter();
+        var emit   = plugin.getEmitter();
         
         var basePath   = options.basePath;
         var retrieving = false;
@@ -32,7 +32,10 @@ define(function(require, exports, module) {
             
             if (!options.base)
                 options.base = basePath;
-    
+                
+            if (emit("fileList", options) === false)
+                return;
+
             cached     = "";
             retrieving = true;
             
