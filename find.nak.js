@@ -177,7 +177,7 @@ define(function(require, exports, module) {
                 
                 vfs.rest("~/.c9/file.listing", {
                     method  : "GET",
-                    query : args,
+                    query   : args,
                     timeout : 120000
                 }, function(err, data, res){
                     callback(err, data);
