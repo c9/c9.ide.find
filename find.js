@@ -74,14 +74,15 @@ define(function(require, exports, module) {
                     done(
                         code ? "Error " + code + "\n" + errCached : null, 
                         cached
-                    )
+                    );
                 });
                 
                 function done(err, data){
                     retrieving = false;
+                    cached = data;
                     if (options.base && options.base != "/") {
                         var rgx = new RegExp(util.escapeRegExp(options.base), "g");
-                        cached  = data.replace(rgx, "").replace(/\\/g, "/");
+                        cached  = cached.replace(rgx, "").replace(/\\/g, "/");
                     }
                     
                     needsBuffer.forEach(function(cb){ cb(err, cached); });
