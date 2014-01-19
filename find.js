@@ -32,9 +32,9 @@ define(function(require, exports, module) {
             
             if (!options.base)
                 options.base = basePath;
-                
+
             if (emit("fileList", options) === false)
-                return;
+                return callback(new Error("Cancelled"));
 
             cached     = "";
             retrieving = true;
