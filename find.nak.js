@@ -88,9 +88,8 @@ define(function(require, exports, module) {
             if (options.hidden)
                 args.hidden = true;
             
-            // TODO this isn't supported in nak yet    
-            if (options.maxdepth)
-                args.maxdepth = options.maxdepth;
+            if (options.limit)
+                args.limit = options.limit;
             
             if (options.startPaths)
                 args.startPaths = options.startPaths;
@@ -120,7 +119,10 @@ define(function(require, exports, module) {
                 
             if (!options.regexp)
                 args.literal = true;
-                
+            
+            if (options.limit)
+                args.limit = options.limit;
+            
             var includes = [], excludes = [];
     
             if (options.pattern) {
