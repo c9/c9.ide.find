@@ -49,6 +49,13 @@ define(function(require, exports, module) {
                            height    : 130,
                            rowheight : 155,
                            position  : 1000
+                       },
+                       "Maximum number of files to search (in 1000)" : {
+                            type : "spinner",
+                            path : "user/finder/@searchLimit",
+                            min  : "1",
+                            max  : "500",
+                            position : 10500
                        }
                    }
                }
@@ -80,6 +87,11 @@ define(function(require, exports, module) {
         
         /***** Methods *****/
         
+        function addLimit(args, options) {
+            args.limit = options.limit || (
+                settings.getNumber("user/finder/@searchLimit") * 1000);
+        }
+        
         function assembleFilelistCommand(options) {
             var args = {list: true};
             
@@ -88,14 +100,12 @@ define(function(require, exports, module) {
             if (options.hidden)
                 args.hidden = true;
             
-            if (options.limit)
-                args.limit = options.limit;
-            
             if (options.startPaths)
                 args.startPaths = options.startPaths;
                 
             args.path = options.path;
             args.follow = true;
+            addLimit(args, options);
             
             if (options.useHttp)
                 return args;
@@ -158,6 +168,7 @@ define(function(require, exports, module) {
             
             args.path = options.path;
             args.follow = true;
+            addLimit(args, options);
             
             return ["--json", JSON.stringify(args)];
         }
