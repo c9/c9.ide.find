@@ -67,6 +67,9 @@ define(function(require, exports, module) {
                         settings.set("state/nak/@installed", true);
                     });
                 }
+                settings.setDefaults("state/nak",[
+                    ["searchLimit", 50]
+                ]);
             });
             
             plugin.getElement("txtPref", function(txtPref){
@@ -129,9 +132,6 @@ define(function(require, exports, module) {
                 
             if (!options.regexp)
                 args.literal = true;
-            
-            if (options.limit)
-                args.limit = options.limit;
             
             var includes = [], excludes = [];
     
