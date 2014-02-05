@@ -52,8 +52,8 @@ define(function(require, exports, module) {
                        },
                        "Maximum number of files to search (in 1000)" : {
                             type : "spinner",
-                            path : "user/finder/@searchLimit",
-                            min  : "1",
+                            path : "user/find.nak/@searchLimit",
+                            min  : "20",
                             max  : "500",
                             position : 10500
                        }
@@ -67,8 +67,8 @@ define(function(require, exports, module) {
                         settings.set("state/nak/@installed", true);
                     });
                 }
-                settings.setDefaults("state/nak",[
-                    ["searchLimit", 50]
+                settings.setDefaults("user/find.nak",[
+                    ["searchLimit", 100]
                 ]);
             });
             
@@ -92,7 +92,7 @@ define(function(require, exports, module) {
         
         function addLimit(args, options) {
             args.limit = options.limit || (
-                settings.getNumber("user/finder/@searchLimit") * 1000);
+                settings.getNumber("user/find.nak/@searchLimit") * 1000);
         }
         
         function assembleFilelistCommand(options) {
