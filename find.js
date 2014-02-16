@@ -81,8 +81,10 @@ define(function(require, exports, module) {
                     retrieving = false;
                     cached = data;
                     if (options.base && options.base != "/") {
-                        var rgx = new RegExp(util.escapeRegExp(options.base), "g");
-                        cached  = cached.replace(rgx, "").replace(/\\/g, "/");
+                        var rgx = new RegExp("^" + util.escapeRegExp(options.base), "gm");
+                        cached  = cached.replace(rgx, "");
+                    } else if (options.base == "/" && cached[0] != "/") {
+                        cached  = cached.trim().replace(/^\/*/gm, "/");
                     }
                     
                     needsBuffer.forEach(function(cb){ cb(err, cached); });
