@@ -15,7 +15,8 @@ define(function(require, exports, module) {
         var vfs      = imports.vfs;
         var fs       = imports.fs;
         
-        var PATH     = require("path");
+        var join     = require("path").join;
+        var dirname  = require("path").dirname;
         
         /***** Initialization *****/
         
@@ -24,7 +25,7 @@ define(function(require, exports, module) {
         
         var USEHTTP     = options.useHttp;
         var IGNORE      = options.ignore;
-        var MAIN_IGNORE = "/.c9/.nakignore";
+        var MAIN_IGNORE = join(options.installPath, "/.nakignore");
         var TEMPLATE    = require("text!./nakignore-template")
             + "\n" + (options.ignore || "");
         var NAK         = options.nak || "~/.c9/node_modules/nak/bin/nak";
@@ -84,6 +85,8 @@ define(function(require, exports, module) {
                         data = TEMPLATE;
                     
                     ta.setValue(data);
+                    
+                    return false;
                 });
             }, plugin);
         }
@@ -98,7 +101,7 @@ define(function(require, exports, module) {
         function assembleFilelistCommand(options) {
             var args = {list: true};
             
-            args.pathToNakignore = PATH.join(options.base, MAIN_IGNORE);
+            args.pathToNakignore = join(options.base, MAIN_IGNORE);
             
             if (options.hidden)
                 args.hidden = true;
@@ -119,7 +122,7 @@ define(function(require, exports, module) {
         function assembleSearchCommand(options) {
             var args = {};
     
-            args.pathToNakignore = PATH.join(options.base, MAIN_IGNORE);
+            args.pathToNakignore = join(options.base, MAIN_IGNORE);
     
             if (!options.casesensitive)
                 args.ignoreCase = true;
@@ -175,7 +178,7 @@ define(function(require, exports, module) {
         
         function list(options, callback){
             options.uri  = options.path || "";
-            options.path = PATH.join((options.base || ""), (options.path || ""));
+            options.path = join((options.base || ""), (options.path || ""));
             options.useHttp = USEHTTP && options.buffer;
             
             if (!options.path)
@@ -205,7 +208,7 @@ define(function(require, exports, module) {
         
         function find(options, callback){
             options.uri  = options.path || "";
-            options.path = PATH.join((options.base || ""), (options.path || ""));
+            options.path = join((options.base || ""), (options.path || ""));
             
             if (!options.path)
                 return callback(new Error("Invalid Path"));
