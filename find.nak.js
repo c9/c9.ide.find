@@ -24,7 +24,7 @@ define(function(require, exports, module) {
         
         var USEHTTP     = options.useHttp;
         var IGNORE      = options.ignore;
-        var MAIN_IGNORE = "/.c9/.nakignore";
+        var MAIN_IGNORE = (options.local ? options.installPath : "") + "/.c9/.nakignore";
         var TEMPLATE    = require("text!./nakignore-template")
             + "\n" + (options.ignore || "");
         var NAK         = options.nak || "~/.c9/node_modules/nak/bin/nak";
