@@ -98,7 +98,9 @@ define(function(require, exports, module) {
         function assembleFilelistCommand(options) {
             var args = {list: true};
             
-            args.pathToNakignore = PATH.join(options.base, MAIN_IGNORE);
+            args.pathToNakignore = options.local
+                ? MAIN_IGNORE
+                : PATH.join(options.base, MAIN_IGNORE);
             
             if (options.hidden)
                 args.hidden = true;
@@ -119,7 +121,9 @@ define(function(require, exports, module) {
         function assembleSearchCommand(options) {
             var args = {};
     
-            args.pathToNakignore = PATH.join(options.base, MAIN_IGNORE);
+            args.pathToNakignore = options.local
+                ? MAIN_IGNORE
+                : PATH.join(options.base, MAIN_IGNORE);
     
             if (!options.casesensitive)
                 args.ignoreCase = true;
