@@ -25,7 +25,7 @@ define(function(require, exports, module) {
         
         var USEHTTP     = options.useHttp;
         var IGNORE      = options.ignore;
-        var MAIN_IGNORE = join(options.installPath, "/.nakignore");
+        var MAIN_IGNORE = (options.local ? options.installPath : "") + "/.nakignore";
         var TEMPLATE    = require("text!./nakignore-template")
             + "\n" + (options.ignore || "");
         var NAK         = options.nak || "~/.c9/node_modules/nak/bin/nak";
@@ -101,7 +101,9 @@ define(function(require, exports, module) {
         function assembleFilelistCommand(options) {
             var args = {list: true};
             
-            args.pathToNakignore = join(options.base, MAIN_IGNORE);
+            args.pathToNakignore = options.local
+                ? MAIN_IGNORE
+                : join(options.base, MAIN_IGNORE);
             
             if (options.hidden)
                 args.hidden = true;
@@ -122,7 +124,9 @@ define(function(require, exports, module) {
         function assembleSearchCommand(options) {
             var args = {};
     
-            args.pathToNakignore = join(options.base, MAIN_IGNORE);
+            args.pathToNakignore = options.local
+                ? MAIN_IGNORE
+                : join(options.base, MAIN_IGNORE);
     
             if (!options.casesensitive)
                 args.ignoreCase = true;
