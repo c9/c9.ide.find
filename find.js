@@ -4,23 +4,23 @@ define(function(require, exports, module) {
     return main;
 
     function main(options, imports, register) {
-        var Plugin   = imports.Plugin;
-        var finder   = imports.finder;
-        var util     = imports.util;
+        var Plugin = imports.Plugin;
+        var finder = imports.finder;
+        var util = imports.util;
         
         /***** Initialization *****/
         
         var plugin = new Plugin("Ajax.org", main.consumes);
-        var emit   = plugin.getEmitter();
+        var emit = plugin.getEmitter();
         
-        var basePath   = options.basePath;
+        var basePath = options.basePath;
         var retrieving = false;
-        var queue      = [];
+        var queue = [];
         var cached, cacheTime;
         
         /***** Methods *****/
         
-        function getFileList(options, callback){
+        function getFileList(options, callback) {
             if (cached && !options.nocache 
               && new Date() - cacheTime < 60 * 60 * 1000)
                 return callback(null, cached);
@@ -36,16 +36,16 @@ define(function(require, exports, module) {
             if (emit("fileList", options) === false)
                 return callback(new Error("Cancelled"));
 
-            cached     = "";
+            cached = "";
             retrieving = true;
             
             finder.list(options, function(err, stdout, stderr, process) {
                 if (!err) {
-                    cacheTime  = new Date();
+                    cacheTime = new Date();
                 }
 
                 var needsBuffer = [];
-                queue.forEach(function(iter){
+                queue.forEach(function(iter) {
                     if (err || !iter[0].buffer)
                         iter[1](err, stderr);
                     else
@@ -77,14 +77,14 @@ define(function(require, exports, module) {
                     );
                 });
                 
-                function done(err, data){
+                function done(err, data) {
                     retrieving = false;
                     cached = data;
                     if (options.base && options.base != "/") {
                         var rgx = new RegExp("^" + util.escapeRegExp(options.base), "gm");
-                        cached  = cached.replace(rgx, "");
+                        cached = cached.replace(rgx, "");
                     } else if (options.base == "/" && cached[0] != "/") {
-                        cached  = cached.trim().replace(/^\/*/gm, "/");
+                        cached = cached.trim().replace(/^\/*/gm, "/");
                     }
                     
                     needsBuffer.forEach(function(cb){ cb(err, cached); });
@@ -92,7 +92,7 @@ define(function(require, exports, module) {
             });
         }
         
-        function findFiles(options, callback){
+        function findFiles(options, callback) {
             if (!options.base)
                 options.base = basePath;
             
@@ -101,7 +101,7 @@ define(function(require, exports, module) {
                     return callback(err, stdout, process);
                 
                 var buffer = "";
-                stdout.on("data", function(lines){
+                stdout.on("data", function(lines) {
                     buffer += lines;
                 });
                 var stderrBuffer = "";
@@ -147,7 +147,7 @@ define(function(require, exports, module) {
          *         path   : "/",
          *         hidden : false,
          *         buffer : true
-         *     }, function(err, result){
+         *     }, function(err, result) {
          *         if (err) throw err;
          *         console.log(result);
          *     });
@@ -161,7 +161,7 @@ define(function(require, exports, module) {
          *         hidden  : false,
          *         pattern : "*.js,-*_test.js",
          *         buffer  : true
-         *     }, function(err, result){
+         *     }, function(err, result) {
          *         if (err) throw err;
          *         console.log(result);
          *     })
@@ -199,7 +199,7 @@ define(function(require, exports, module) {
              *   are a string when `options.buffer` is set to true, otherwise 
              *   it is a stream.
              */
-            findFiles : findFiles,
+            findFiles: findFiles,
             
             /**
              * Retrieves a list of files under a path
@@ -216,7 +216,7 @@ define(function(require, exports, module) {
              *   are a string when `options.buffer` is set to true, otherwise 
              *   it is a stream.
              */
-            getFileList : getFileList
+            getFileList: getFileList
         });
         
         register(null, {
