@@ -1,4 +1,4 @@
-/*global describe it before after  =*/
+/*global describe it before after = */
 
 "use client";
 
@@ -8,17 +8,17 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
     var Assert = chai.assert;
     
     baseProc = baseProc.replace(/plugins\/.*/, "plugins/c9.ide.find/mock");
-    var nak  = baseProc.replace(/plugins\/.*/, "/node_modules/nak/bin/nak");
+    var nak = baseProc.replace(/plugins\/.*/, "/node_modules/nak/bin/nak");
     
     expect.setupArchitectTest([
         {
-            packagePath : "plugins/c9.core/c9",
-            workspaceId : "ubuntu/ip-10-35-77-180",
-            startdate   : new Date(),
-            debug       : true,
-            hosted      : true,
-            local       : false,
-            davPrefix   : "/"
+            packagePath: "plugins/c9.core/c9",
+            workspaceId: "ubuntu/ip-10-35-77-180",
+            startdate: new Date(),
+            debug: true,
+            hosted: true,
+            local: false,
+            davPrefix: "/"
         },
         
         "plugins/c9.core/ext",
@@ -29,15 +29,15 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         "plugins/c9.core/settings",
         "plugins/c9.core/api.js",
         {
-            packagePath  : "plugins/c9.ide.find/find",
-            basePath     : baseProc
+            packagePath: "plugins/c9.ide.find/find",
+            basePath: baseProc
         },
         {
-            packagePath  : "plugins/c9.ide.find/find.nak",
-            ignore       : "file7_ignorable.rb",
-            basePath     : baseProc,
-            testing      : true,
-            nak          : nak
+            packagePath: "plugins/c9.ide.find/find.nak",
+            ignore: "file7_ignorable.rb",
+            basePath: baseProc,
+            testing: true,
+            nak: nak
         },
         "plugins/c9.vfs.client/vfs_client",
         "plugins/c9.vfs.client/endpoint",
@@ -47,35 +47,35 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         
         // Mock plugins
         {
-            consumes : ["ui", "Plugin"],
-            provides : [
+            consumes: ["ui", "Plugin"],
+            provides: [
                 "preferences", "auth.bootstrap", "info", "dialog.error"
             ],
-            setup    : expect.html.mocked
+            setup: expect.html.mocked
         },
         {
-            consumes : ["find", "finder"],
-            provides : [],
-            setup    : main
+            consumes: ["find", "finder"],
+            provides: [],
+            setup: main
         }
     ], architect);
     
     function main(options, imports, register) {
-        var find   = imports.find;
+        var find = imports.find;
         var finder = imports.finder;
         
         describe('find', function() {
             this.timeout(10000);
             
             describe("getFileList", function(){
-                var path        = "/list";
-                var basePath    = "/list";
+                var path = "/list";
+                var basePath = "/list";
                 
                 var options1 = { buffer: true, hidden: true, path: path };
                 var options2 = { buffer: true, hidden: true, path: path, nocache: true };
                 
                 it('should return a list of files', function(done) {
-                    find.getFileList(options1, function(err, results){
+                    find.getFileList(options1, function(err, results) {
                         Assert.equal(!err, true);
                         var files = results.split("\n").filter(function(file) { return !!file; }).sort();
 
@@ -86,7 +86,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
                 it('should get a cache of the file list the 2nd time', function(done) {
-                    find.getFileList(options1, function(err, results){
+                    find.getFileList(options1, function(err, results) {
                         Assert.equal(!err, true);
                         var files = results.split("\n").filter(function(file) { return !!file; }).sort();
 
@@ -98,7 +98,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
                 it('should ignore a cached file list', function(done) {
-                    find.getFileList(options2, function(err, results){
+                    find.getFileList(options2, function(err, results) {
                         Assert.equal(!err, true);
                         var files = results.split("\n").filter(function(file) { return !!file; }).sort();
 
@@ -135,28 +135,28 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
             });
         });
         describe('finder', function() {
-            function buffer(stream, callback){
+            function buffer(stream, callback) {
                 var buf = "";
-                stream.on("data", function(chunk){
+                stream.on("data", function(chunk) {
                     buf += chunk;
                 });
-                stream.on("end", function(data){
+                stream.on("end", function(data) {
                     callback(buf, data);
                 });
             }
             
             describe("list", function(){
-                var base        = baseProc + "/list";
-                var basePath    = base;
-                var path        = "/";
+                var base = baseProc + "/list";
+                var basePath = base;
+                var path = "/";
                 
                 var options1 = { hidden: true, base: base, path: path };
                 var options2 = { hidden: false, base: base, path: path };
                 var options3 = { path: "doesnotexist", hidden: true, base: base };
             
                 it("should get filelist, including hidden files and binaries",  function(done) {
-                    finder.list(options1, function(err, stream){
-                        buffer(stream, function(results){
+                    finder.list(options1, function(err, stream) {
+                        buffer(stream, function(results) {
                             Assert.equal(!err, true);
                             var files = results.split("\n").filter(function(file) { return !!file; }).sort();
     
@@ -170,8 +170,8 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                 });
             
                 it("should get filelist, without hidden files",  function(done) {
-                    finder.list(options2, function(err, stream){
-                        buffer(stream, function(results){
+                    finder.list(options2, function(err, stream) {
+                        buffer(stream, function(results) {
                             Assert.equal(!err, true);
                             var files = results.split("\n").filter(function(file) { return !!file; }).sort();
                             Assert.equal(files[3], basePath + "/level1/level2/level2.rb");
@@ -183,8 +183,8 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                 });
             
                 it("should return an empty list when a path does not exist",  function(done) {
-                    finder.list(options3, function(err, stream){
-                        buffer(stream, function(results){
+                    finder.list(options3, function(err, stream) {
+                        buffer(stream, function(results) {
                             Assert.equal(results.trim(), "");
                             done();
                         });
@@ -192,9 +192,9 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                 });
             });
             describe("find", function(){
-                var base        = baseProc + "/find";
-                var basePath    = base;
-                var path        = "";
+                var base = baseProc + "/find";
+                var basePath = base;
+                var path = "";
                 
                 var options1 = {
                     query: "sriracha",
@@ -278,7 +278,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     
                 it("should find matches without regexp, case-sensitive OFF and word boundaries OFF",  function(done) {
                     finder.find(options1, function(err, stream) {
-                        buffer(stream, function(results, data){
+                        buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
                             expect(results).to.match(/Found 8 matches in 4 files/);
                             var lines = results.split("\n");
@@ -290,7 +290,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
             
                 it("should find matches without regexp, case-sensitive ON and word boundaries OFF",  function(done) {
                     finder.find(options2, function(err, stream) {
-                        buffer(stream, function(results, data){
+                        buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
                             expect(results).to.match(/Found 2 matches in 2 files/);
                             var lines = results.split("\n");
@@ -303,7 +303,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
             
                 it("should find matches without regexp, case-sensitive OFF and word boundaries ON",  function(done) {
                     finder.find(options3, function(err, stream) {
-                        buffer(stream, function(results, data){
+                        buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
                             expect(results).to.match(/Found 3 matches in 3 files/);
                             var lines = results.split("\n");
@@ -316,7 +316,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
             
                 it("should find matches with a regexp, case-sensitive OFF",  function(done) {
                     finder.find(options4, function(err, stream) {
-                        buffer(stream, function(results, data){
+                        buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
                             expect(results).to.match(/Found 8 matches in 4 files/);
                             var lines = results.split("\n");
@@ -329,7 +329,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                 
                 it("should find matches with a regexp, case-sensitive ON, including the default .agignore file, and hidden files",  function(done) {
                     finder.find(options5, function(err, stream) {
-                        buffer(stream, function(results, data){
+                        buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
                             expect(results).to.match(/Found 14 matches in 7 files/);
                             var lines = results.split("\n");
@@ -342,7 +342,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
              
                 it("should find matches without regexp, only two file types, and no hidden files (even if they contain the string)",  function(done) {
                     finder.find(options6, function(err, stream) {
-                        buffer(stream, function(results, data){
+                        buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
                             expect(results).to.match(/Found 2 matches in 2 files/);
                             var lines = results.split("\n");
@@ -356,7 +356,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
             
                 it("should find matches without regexp, excluding txt files",  function(done) {
                     finder.find(options7, function(err, stream) {
-                        buffer(stream, function(results, data){
+                        buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
                             expect(results).to.match(/Found 14 matches in 4 files/);
                             var lines = results.split("\n");

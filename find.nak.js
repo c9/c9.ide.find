@@ -8,54 +8,54 @@ define(function(require, exports, module) {
     return main;
 
     function main(options, imports, register) {
-        var Plugin   = imports.Plugin;
+        var Plugin = imports.Plugin;
         var settings = imports.settings;
-        var prefs    = imports.preferences;
-        var proc     = imports.proc;
-        var vfs      = imports.vfs;
-        var fs       = imports.fs;
+        var prefs = imports.preferences;
+        var proc = imports.proc;
+        var vfs = imports.vfs;
+        var fs = imports.fs;
         
-        var PATH     = require("path");
+        var PATH = require("path");
         
         /***** Initialization *****/
         
         var plugin = new Plugin("Ajax.org", main.consumes);
-        // var emit   = plugin.getEmitter();
+        // var emit = plugin.getEmitter();
         
-        var USEHTTP     = options.useHttp;
-        var IGNORE      = options.ignore;
+        var USEHTTP = options.useHttp;
+        var IGNORE = options.ignore;
         var MAIN_IGNORE = (options.local ? options.installPath : "") + "/.c9/.nakignore";
-        var TEMPLATE    = require("text!./nakignore-template")
+        var TEMPLATE = require("text!./nakignore-template")
             + "\n" + (options.ignore || "");
-        var NAK         = options.nak || "~/.c9/node_modules/nak/bin/nak";
-        var NODE        = options.node;
+        var NAK = options.nak || "~/.c9/node_modules/nak/bin/nak";
+        var NODE = options.node;
         
         if (NODE && Array.isArray(NODE)) 
             NODE = NODE[0];
 
         var loaded = false;
-        function load(callback){
+        function load(callback) {
             if (loaded) return;
             loaded = true;
             
             prefs.add({
                "General" : {
                    "Find in Files" : {
-                       position : 30,
+                       position: 30,
                        "Ignore these files" : {
-                           name      : "txtPref",
-                           type      : "textarea",
-                           width     : 150,
-                           height    : 130,
-                           rowheight : 155,
-                           position  : 1000
+                           name: "txtPref",
+                           type: "textarea",
+                           width: 150,
+                           height: 130,
+                           rowheight: 155,
+                           position: 1000
                        },
                        "Maximum number of files to search (in 1000)" : {
-                            type : "spinner",
-                            path : "user/find.nak/@searchLimit",
-                            min  : "20",
-                            max  : "500",
-                            position : 10500
+                            type: "spinner",
+                            path: "user/find.nak/@searchLimit",
+                            min: "20",
+                            max: "500",
+                            position: 10500
                        }
                    }
                }
@@ -72,14 +72,14 @@ define(function(require, exports, module) {
                 ]);
             });
             
-            plugin.getElement("txtPref", function(txtPref){
+            plugin.getElement("txtPref", function(txtPref) {
                 var ta = txtPref.lastChild;
                 
-                ta.on("afterchange", function(e){
+                ta.on("afterchange", function(e) {
                     fs.writeFile(MAIN_IGNORE, e.value, function(){});
                 });
                 
-                fs.readFile(MAIN_IGNORE, function(err, data){
+                fs.readFile(MAIN_IGNORE, function(err, data) {
                     if (err)
                         data = TEMPLATE;
                     
@@ -177,8 +177,8 @@ define(function(require, exports, module) {
             return ["--json", JSON.stringify(args)];
         }
         
-        function list(options, callback){
-            options.uri  = options.path || "";
+        function list(options, callback) {
+            options.uri = options.path || "";
             options.path = PATH.join((options.base || ""), (options.path || ""));
             options.useHttp = USEHTTP && options.buffer;
             
@@ -193,22 +193,22 @@ define(function(require, exports, module) {
                 delete args.follow;
                 
                 vfs.rest("~/.c9/file.listing", {
-                    method  : "GET",
-                    query   : args,
-                    timeout : 120000
-                }, function(err, data, res){
+                    method: "GET",
+                    query: args,
+                    timeout: 120000
+                }, function(err, data, res) {
                     callback(err, data);
                 });
             }
             else {
-                execute(args, function(err, stdout, stderr, process){
+                execute(args, function(err, stdout, stderr, process) {
                     callback(err, stdout, stderr, process);
                 });
             }
         }
         
-        function find(options, callback){
-            options.uri  = options.path || "";
+        function find(options, callback) {
+            options.uri = options.path || "";
             options.path = PATH.join((options.base || ""), (options.path || ""));
             
             if (!options.path)
@@ -221,16 +221,16 @@ define(function(require, exports, module) {
             // if (this.activeProcess)
             //     this.activeProcess.kill("SIGKILL");
                 
-            execute(args, function(err, stdout, stderr, process){
+            execute(args, function(err, stdout, stderr, process) {
                 callback(err, stdout, stderr, process);
             });
         }
         
-        function execute(args, callback){
+        function execute(args, callback) {
             if (NODE) args.unshift(NAK);
             proc.spawn(NODE || NAK, {
                 args: args
-            }, function(err, process){
+            }, function(err, process) {
                 if (err)
                     return callback(err);
                 
@@ -275,7 +275,7 @@ define(function(require, exports, module) {
              * @param {Error}    callback.err     
              * @param {proc.Stream}   callback.results 
              */
-            find : find,
+            find: find,
             
             /**
              * Retrieves a list of files under a path
@@ -288,7 +288,7 @@ define(function(require, exports, module) {
              * @param {Error}    callback.err     
              * @param {proc.Stream}   callback.results 
              */
-            list : list
+            list: list
         });
         
         register(null, {
