@@ -263,7 +263,7 @@ define(function(require, exports, module) {
             /**
              * Retrieves a list of files and lines that match a string or pattern
              * @param {Object}   options 
-             * @param {String}   options.path             the path to search in (displayed in the results)
+             * @param {String}   options.path             the path (relative to options.base) to search in (displayed in the results)
              * @param {String}   [options.base]           the base path to search in (is not displayed in the results)
              * @param {String}   [options.query]          the text or regexp to match the file contents with
              * @param {Boolean}  [options.casesensitive]  whether to match on case or not. Default is false;
