@@ -2,7 +2,8 @@ define(function(require, exports, module) {
     "use strict";
     
     main.consumes = [
-        "Plugin", "preferences", "ext", "fs", "proc", "settings", "vfs", "c9"
+        "Plugin", "preferences", "ext", "fs", "proc", "settings", "vfs", "c9",
+        "util"
     ];
     main.provides = ["finder"];
     return main;
@@ -15,6 +16,7 @@ define(function(require, exports, module) {
         var vfs = imports.vfs;
         var fs = imports.fs;
         var c9 = imports.c9;
+        var util = imports.util;
         
         var join = require("path").join;
         var dirname = require("path").dirname;
@@ -100,14 +102,17 @@ define(function(require, exports, module) {
         }
         
         function resolvePaths(args){
-            args.startPaths = args.startPaths.map(function(p){
-                return p.replace(/^~/, c9.home);
-            });
+            var re = new RegExp("^(" 
+                + util.escapeRegExp(args.startPaths.join("|")) + ").+$");
             
             if (args.path != "/") {
                 args.startPaths.push(args.path);
                 args.path = "/";
             }
+            
+            args.startPaths = args.startPaths
+              .filter(function(p){ return !re.test(p); })
+              .map(function(p){ return p.replace(/^~/, c9.home); });
         }
         
         function assembleFilelistCommand(options) {
