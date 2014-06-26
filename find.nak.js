@@ -2,7 +2,7 @@ define(function(require, exports, module) {
     "use strict";
     
     main.consumes = [
-        "Plugin", "preferences", "ext", "fs", "proc", "settings", "vfs"
+        "Plugin", "preferences", "ext", "fs", "proc", "settings", "vfs", "c9"
     ];
     main.provides = ["finder"];
     return main;
@@ -14,6 +14,7 @@ define(function(require, exports, module) {
         var proc = imports.proc;
         var vfs = imports.vfs;
         var fs = imports.fs;
+        var c9 = imports.c9;
         
         var join = require("path").join;
         var dirname = require("path").dirname;
@@ -98,6 +99,17 @@ define(function(require, exports, module) {
                 settings.getNumber("user/find.nak/@searchLimit") * 1000);
         }
         
+        function resolvePaths(args){
+            args.startPaths = args.startPaths.map(function(p){
+                return p.replace(/^~/, c9.home);
+            });
+            
+            if (args.path != "/") {
+                args.startPaths.push(args.path);
+                args.path = "/";
+            }
+        }
+        
         function assembleFilelistCommand(options) {
             var args = {list: true};
             
@@ -107,12 +119,15 @@ define(function(require, exports, module) {
             
             if (options.hidden)
                 args.hidden = true;
-            
-            if (options.startPaths)
-                args.startPaths = options.startPaths;
                 
             args.path = options.path;
             args.follow = true;
+            
+            if (options.startPaths) {
+                args.startPaths = options.startPaths;
+                resolvePaths(args);
+            }
+            
             addLimit(args, options);
             
             if (options.useHttp)
@@ -170,11 +185,14 @@ define(function(require, exports, module) {
             if (options.replaceAll)
                 args.replacement = options.replacement;
             
-            if (options.startPaths)
-                args.startPaths = options.startPaths;
-            
             args.path = options.path;
             args.follow = true;
+            
+            if (options.startPaths) {
+                args.startPaths = options.startPaths;
+                resolvePaths(args);
+            }
+            
             addLimit(args, options);
             
             return ["--json", JSON.stringify(args)];
