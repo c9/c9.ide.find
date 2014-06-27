@@ -208,7 +208,8 @@ define(function(require, exports, module) {
         
         function list(options, callback) {
             options.uri = options.path || "";
-            options.path = join((options.base || ""), (options.path || "").replace(/^~/, c9.home));
+            options.path = resolve(options.base || "", 
+                (options.path || "").replace(/^~/, c9.home));
             options.useHttp = USEHTTP && options.buffer;
             
             if (!options.path)
@@ -238,7 +239,8 @@ define(function(require, exports, module) {
         
         function find(options, callback) {
             options.uri = options.path || "";
-            options.path = resolve(options.base || "", (options.path || "").replace(/^~/, c9.home));
+            options.path = resolve(options.base || "", 
+                (options.path || "").replace(/^~/, c9.home));
             
             if (!options.path)
                 return callback(new Error("Invalid Path"));
