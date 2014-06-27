@@ -102,10 +102,11 @@ define(function(require, exports, module) {
         }
         
         function resolvePaths(args){
-            if (args.path != "/") {
-                args.startPaths.push(args.path);
+            if (!args.startPaths.length)
+                return;
+            
+            if (args.path != "/")
                 args.path = "/";
-            }
             
             args.startPaths = args.startPaths.map(function(p){ 
                 return p.replace(/^~/, c9.home); 
@@ -208,8 +209,9 @@ define(function(require, exports, module) {
         
         function list(options, callback) {
             options.uri = options.path || "";
-            options.path = resolve(options.base || "", 
-                (options.path || "").replace(/^~/, c9.home));
+            options.path = options.path.charAt(0) == "~"
+                ? options.path.replace(/^~/, c9.home)
+                : join(options.base || "", options.path || "");
             options.useHttp = USEHTTP && options.buffer;
             
             if (!options.path)
@@ -239,8 +241,9 @@ define(function(require, exports, module) {
         
         function find(options, callback) {
             options.uri = options.path || "";
-            options.path = resolve(options.base || "", 
-                (options.path || "").replace(/^~/, c9.home));
+            options.path = options.path.charAt(0) == "~"
+                ? options.path.replace(/^~/, c9.home)
+                : join(options.base || "", options.path || "");
             
             if (!options.path)
                 return callback(new Error("Invalid Path"));
