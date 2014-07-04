@@ -19,7 +19,6 @@ define(function(require, exports, module) {
         var util = imports.util;
         
         var join = require("path").join;
-        var resolve = require("path").resolve;
         
         /***** Initialization *****/
         
@@ -43,9 +42,9 @@ define(function(require, exports, module) {
             loaded = true;
             
             prefs.add({
-               "General" : {
+               "Project" : {
                    "Find in Files" : {
-                       position: 30,
+                       position: 300,
                        "Ignore these files" : {
                            name: "txtPref",
                            type: "textarea",
@@ -56,7 +55,7 @@ define(function(require, exports, module) {
                        },
                        "Maximum number of files to search (in 1000)" : {
                             type: "spinner",
-                            path: "user/find.nak/@searchLimit",
+                            path: "project/find.nak/@searchLimit",
                             min: "20",
                             max: "500",
                             position: 10500
@@ -71,7 +70,8 @@ define(function(require, exports, module) {
                         settings.set("state/nak/@installed", true);
                     });
                 }
-                settings.setDefaults("user/find.nak",[
+                settings.migrate("user/find.nak", "project/find.nak");
+                settings.setDefaults("project/find.nak", [
                     ["searchLimit", 100]
                 ]);
             });
@@ -98,7 +98,7 @@ define(function(require, exports, module) {
         
         function addLimit(args, options) {
             args.limit = options.limit || (
-                settings.getNumber("user/find.nak/@searchLimit") * 1000);
+                settings.getNumber("project/find.nak/@searchLimit") * 1000);
         }
         
         function resolvePaths(args){
