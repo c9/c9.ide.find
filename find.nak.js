@@ -105,12 +105,14 @@ define(function(require, exports, module) {
             if (!args.startPaths.length)
                 return;
             
+            args.startPaths = args.startPaths.map(function(p){ 
+                return p.replace(/^~?\//, function(m) {
+                    return m.length === 2 ? c9.home : args.path;
+                });
+            });
+            
             if (args.path != "/")
                 args.path = "/";
-            
-            args.startPaths = args.startPaths.map(function(p){ 
-                return p.replace(/^~/, c9.home); 
-            });
             
             var re = new RegExp("^(" 
                 + args.startPaths.map(util.escapeRegExp).join("|") + ").+$");
