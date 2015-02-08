@@ -9,15 +9,13 @@
         "url": "http://github.com/c9/c9.ide.find.git"
     },
     "plugins": {
-        "plugin": {
-            "find": {},
-            "find.nak": {}
-        }
+        "find": {},
+        "find.nak": {}
     },
     "categories": [
         "core"
     ],
     "licenses": [
-        ""
+        "AGPL"
     ]
 }
