@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     
     main.consumes = [
         "Plugin", "preferences", "ext", "fs", "proc", "settings", "vfs", "c9",
-        "util"
+        "util", "installer"
     ];
     main.provides = ["finder"];
     return main;
@@ -11,6 +11,7 @@ define(function(require, exports, module) {
     function main(options, imports, register) {
         var Plugin = imports.Plugin;
         var settings = imports.settings;
+        var installer = imports.installer;
         var prefs = imports.preferences;
         var proc = imports.proc;
         var vfs = imports.vfs;
@@ -35,6 +36,10 @@ define(function(require, exports, module) {
         
         if (NODE && Array.isArray(NODE)) 
             NODE = NODE[0];
+
+        // Check that all the dependencies are installed
+        var VERSION = c9.version || "3.0.0";
+        installer.createSession("c9.ide.find", VERSION, require("./install"));
 
         var loaded = false;
         function load(callback) {
