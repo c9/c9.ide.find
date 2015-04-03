@@ -127,13 +127,11 @@ define(function(require, exports, module) {
         plugin.on("load", function(){
 
         });
-        plugin.on("enable", function(){
-
-        });
-        plugin.on("disable", function(){
-
-        });
         plugin.on("unload", function(){
+            retrieving = null;
+            queue = null;
+            cached = null;
+            cacheTime = null;
         });
         
         /***** Register and define API *****/
