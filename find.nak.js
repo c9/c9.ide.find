@@ -38,8 +38,7 @@ define(function(require, exports, module) {
             NODE = NODE[0];
 
         // Check that all the dependencies are installed
-        var VERSION = c9.version || "3.0.0";
-        installer.createSession("c9.ide.find", VERSION, require("./install"));
+        installer.createSession("c9.ide.find", require("./install"));
 
         var loaded = false;
         function load(callback) {
