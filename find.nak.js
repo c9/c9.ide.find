@@ -109,6 +109,7 @@ define(function(require, exports, module) {
             if (!args.startPaths.length)
                 return;
             
+            args.path = args.path.replace(/\/?$/, "/");
             args.startPaths = args.startPaths.map(function(p){ 
                 return p.replace(/^~?\//, function(m) {
                     return m.length === 2 ? c9.home : args.path;
@@ -176,7 +177,7 @@ define(function(require, exports, module) {
                 // strip whitespace, grab out exclusions
                 options.pattern.split(",").forEach(function (p) {
                     // strip whitespace
-                    p = p.replace(/\s*/g, "");
+                    p = p.trim();
     
                     if (/^\-/.test(p))
                         excludes.push(p.substring(1));
