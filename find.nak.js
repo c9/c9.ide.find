@@ -237,7 +237,7 @@ define(function(require, exports, module) {
                     query: args,
                     timeout: 120000
                 }, function(err, data, res) {
-                    if (err & err.code == 412) {
+                    if (err && err.code == 412) {
                         commands.exec("showinstaller", null, {
                             packages: ["c9.ide.find"]
                         });
