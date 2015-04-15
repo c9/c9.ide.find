@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     
     main.consumes = [
         "Plugin", "preferences", "ext", "fs", "proc", "settings", "vfs", "c9",
-        "util", "installer"
+        "util", "installer", "commands"
     ];
     main.provides = ["finder"];
     return main;
@@ -18,6 +18,7 @@ define(function(require, exports, module) {
         var fs = imports.fs;
         var c9 = imports.c9;
         var util = imports.util;
+        var commands = imports.commands;
         
         var join = require("path").join;
         
@@ -236,6 +237,12 @@ define(function(require, exports, module) {
                     query: args,
                     timeout: 120000
                 }, function(err, data, res) {
+                    if (err & err.code == 412) {
+                        commands.exec("showinstaller", null, {
+                            packages: ["c9.ide.find"]
+                        });
+                    }
+                    
                     callback(err, data);
                 });
             }
