@@ -14,20 +14,34 @@ define(function(require, exports, module) {
         var emit = plugin.getEmitter();
         
         var basePath = options.basePath;
-        var retrieving = false;
-        var queue = [];
-        var cached, cacheTime;
+        var state = {};
+        
+        var retrieving = {};
+        var queue = {};
+        var cached = {}
+        var cacheTime = {};
         
         /***** Methods *****/
         
         function getFileList(options, callback) {
-            if (cached && !options.nocache 
-              && new Date() - cacheTime < 60 * 60 * 1000)
-                return callback(null, cached);
-    
-            queue.push([options, callback]);
+            var index = (options.base ? options.base + "/" : "") + options.path;
+            if (!state[index]) {
+                state[index] = { 
+                    queue: [], 
+                    cached: "", 
+                    cacheTime: null, 
+                    retrieving: false 
+                };
+            }
+            var _ = state[index];
             
-            if (retrieving)
+            if (_.cached && !options.nocache 
+              && new Date() - _.cacheTime < 60 * 60 * 1000)
+                return callback(null, _.cached);
+            
+            _.queue.push([options, callback]);
+            
+            if (_.retrieving)
                 return;
             
             if (!options.base)
@@ -36,22 +50,22 @@ define(function(require, exports, module) {
             if (emit("fileList", options) === false)
                 return callback(new Error("Cancelled"));
 
-            cached = "";
-            retrieving = true;
+            _.cached = "";
+            _.retrieving = true;
             
             finder.list(options, function(err, stdout, stderr, process) {
                 if (!err) {
-                    cacheTime = new Date();
+                    _.cacheTime = new Date();
                 }
 
                 var needsBuffer = [];
-                queue.forEach(function(iter) {
+                _.queue.forEach(function(iter) {
                     if (err || !iter[0].buffer)
                         iter[1](err, stderr);
                     else
                         needsBuffer.push(iter[1]);
                 });
-                queue = [];
+                _.queue = [];
                 
                 // We got the results pre-buffered
                 if (typeof stdout == "string") {
@@ -61,9 +75,9 @@ define(function(require, exports, module) {
                 
                 if (err || !needsBuffer) return;
                 
-                cached = "";
+                _.cached = "";
                 stdout.on("data", function(lines) {
-                    cached += lines;
+                    _.cached += lines;
                 });
                 var errCached = "";
                 stderr.on("data", function(lines) {
@@ -73,21 +87,21 @@ define(function(require, exports, module) {
                 process.on("exit", function(code) {
                     done(
                         code ? "Error " + code + "\n" + errCached : null, 
-                        cached
+                        _.cached
                     );
                 });
                 
                 function done(err, data) {
-                    retrieving = false;
-                    cached = data;
+                    _.retrieving = false;
+                    _.cached = data;
                     if (options.base && options.base != "/") {
                         var rgx = new RegExp("^" + util.escapeRegExp(options.base), "gm");
-                        cached = cached.replace(rgx, "");
-                    } else if (options.base == "/" && cached[0] != "/") {
-                        cached = cached.trim().replace(/^\/*/gm, "/");
+                        _.cached = _.cached.replace(rgx, "");
+                    } else if (options.base == "/" && _.cached[0] != "/") {
+                        _.cached = _.cached.trim().replace(/^\/*/gm, "/");
                     }
                     
-                    needsBuffer.forEach(function(cb){ cb(err, cached); });
+                    needsBuffer.forEach(function(cb){ cb(err, _.cached); });
                 }
             });
         }
@@ -128,8 +142,8 @@ define(function(require, exports, module) {
 
         });
         plugin.on("unload", function(){
-            retrieving = null;
-            queue = null;
+            retrieving = {};
+            queue = {};
             cached = null;
             cacheTime = null;
         });
