@@ -216,6 +216,10 @@ define(function(require, exports, module) {
         }
         
         function list(options, callback) {
+            if (!installer.isInstalled("c9.ide.find", function(){
+                list(options, callback);
+            })) return;
+            
             options.uri = options.path || "";
             options.path = options.path.charAt(0) == "~"
                 ? options.path.replace(/^~/, c9.home)
@@ -254,6 +258,10 @@ define(function(require, exports, module) {
         }
         
         function find(options, callback) {
+            if (!installer.isInstalled("c9.ide.find", function(){
+                find(options, callback);
+            })) return;
+            
             options.uri = options.path || "";
             options.path = options.path.charAt(0) == "~"
                 ? options.path.replace(/^~/, c9.home)
