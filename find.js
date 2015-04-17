@@ -16,14 +16,12 @@ define(function(require, exports, module) {
         var basePath = options.basePath;
         var state = {};
         
-        var retrieving = {};
-        var queue = {};
-        var cached = {}
-        var cacheTime = {};
-        
         /***** Methods *****/
         
         function getFileList(options, callback) {
+            if (!options.base)
+                options.base = basePath;
+            
             var index = (options.base ? options.base + "/" : "") + options.path;
             if (!state[index]) {
                 state[index] = { 
@@ -43,9 +41,6 @@ define(function(require, exports, module) {
             
             if (_.retrieving)
                 return;
-            
-            if (!options.base)
-                options.base = basePath;
 
             if (emit("fileList", options) === false)
                 return callback(new Error("Cancelled"));
@@ -142,10 +137,7 @@ define(function(require, exports, module) {
 
         });
         plugin.on("unload", function(){
-            retrieving = {};
-            queue = {};
-            cached = null;
-            cacheTime = null;
+            
         });
         
         /***** Register and define API *****/

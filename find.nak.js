@@ -136,7 +136,7 @@ define(function(require, exports, module) {
             if (options.hidden)
                 args.hidden = true;
                 
-            args.path = options.path;
+            args.path = options.normalizedPath;
             args.follow = true;
             
             if (options.startPaths) {
@@ -201,7 +201,7 @@ define(function(require, exports, module) {
             if (options.replaceAll)
                 args.replacement = options.replacement;
             
-            args.path = options.path;
+            args.path = options.normalizedPath;
             args.follow = true;
             
             if (options.startPaths) {
@@ -216,12 +216,12 @@ define(function(require, exports, module) {
         
         function list(options, callback) {
             options.uri = options.path || "";
-            options.path = options.path.charAt(0) == "~"
+            options.normalizedPath = options.path.charAt(0) == "~"
                 ? options.path.replace(/^~/, c9.home)
                 : join(options.base || "", options.path || "");
             options.useHttp = USEHTTP && options.buffer;
             
-            if (!options.path)
+            if (!options.normalizedPath)
                 return callback(new Error("Invalid Path"));
             var args = assembleFilelistCommand(options);
             if (!args)
@@ -248,11 +248,11 @@ define(function(require, exports, module) {
         
         function find(options, callback) {
             options.uri = options.path || "";
-            options.path = options.path.charAt(0) == "~"
+            options.normalizedPath = options.path.charAt(0) == "~"
                 ? options.path.replace(/^~/, c9.home)
                 : join(options.base || "", options.path || "");
             
-            if (!options.path)
+            if (!options.normalizedPath)
                 return callback(new Error("Invalid Path"));
             
             var args = assembleSearchCommand(options);
