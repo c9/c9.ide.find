@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     
     main.consumes = [
         "Plugin", "preferences", "ext", "fs", "proc", "settings", "vfs", "c9",
-        "util", "installer"
+        "util", "installer", "commands"
     ];
     main.provides = ["finder"];
     return main;
@@ -18,6 +18,7 @@ define(function(require, exports, module) {
         var fs = imports.fs;
         var c9 = imports.c9;
         var util = imports.util;
+        var commands = imports.commands;
         
         var join = require("path").join;
         
@@ -215,6 +216,10 @@ define(function(require, exports, module) {
         }
         
         function list(options, callback) {
+            if (!installer.isInstalled("c9.ide.find", function(){
+                list(options, callback);
+            })) return;
+            
             options.uri = options.path || "";
             options.normalizedPath = options.path.charAt(0) == "~"
                 ? options.path.replace(/^~/, c9.home)
@@ -236,6 +241,12 @@ define(function(require, exports, module) {
                     query: args,
                     timeout: 120000
                 }, function(err, data, res) {
+                    if (err && err.code == 412) {
+                        commands.exec("showinstaller", null, {
+                            packages: ["c9.ide.find"]
+                        });
+                    }
+                    
                     callback(err, data);
                 });
             }
@@ -247,6 +258,10 @@ define(function(require, exports, module) {
         }
         
         function find(options, callback) {
+            if (!installer.isInstalled("c9.ide.find", function(){
+                find(options, callback);
+            })) return;
+            
             options.uri = options.path || "";
             options.normalizedPath = options.path.charAt(0) == "~"
                 ? options.path.replace(/^~/, c9.home)
