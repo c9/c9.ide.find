@@ -171,6 +171,9 @@ define(function(require, exports, module) {
                 
             if (!options.regexp)
                 args.literal = true;
+                
+            if (options.addVCSIgnores)
+                args.addVCSIgnores = true;
             
             var includes = [], excludes = [];
     
