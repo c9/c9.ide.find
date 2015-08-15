@@ -262,7 +262,10 @@ define(function(require, exports, module) {
                 find(options, callback);
             })) return;
             
-            options.uri = options.path || "";
+            if (!options.path)
+                options.path = "";
+            
+            options.uri = options.path;
             options.normalizedPath = options.path.charAt(0) == "~"
                 ? options.path.replace(/^~/, c9.home)
                 : join(options.base || "", options.path || "");
