@@ -66,7 +66,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         var finder = imports.finder;
         
         describe('find', function() {
-            this.timeout(10000);
+            this.timeout(30000);
             
             describe("getFileList", function(){
                 var path = "/list";
