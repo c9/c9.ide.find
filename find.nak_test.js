@@ -13,12 +13,10 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
     expect.setupArchitectTest([
         {
             packagePath: "plugins/c9.core/c9",
-            workspaceId: "ubuntu/ip-10-35-77-180",
             startdate: new Date(),
             debug: true,
             hosted: true,
             local: false,
-            davPrefix: "/"
         },
         
         "plugins/c9.core/ext",
@@ -38,7 +36,8 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
             basePath: baseProc,
             installPath: "~/.c9",
             testing: true,
-            nak: nak
+            nak: nak,
+            node: "node"
         },
         "plugins/c9.vfs.client/vfs_client",
         "plugins/c9.vfs.client/endpoint",
@@ -46,14 +45,6 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         "plugins/c9.fs/fs",
         "plugins/c9.fs/proc",
         
-        // Mock plugins
-        {
-            consumes: ["ui", "Plugin"],
-            provides: [
-                "preferences", "auth.bootstrap", "info", "dialog.error"
-            ],
-            setup: expect.html.mocked
-        },
         {
             consumes: ["find", "finder"],
             provides: [],
