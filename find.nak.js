@@ -47,10 +47,10 @@ define(function(require, exports, module) {
             loaded = true;
             
             prefs.add({
-               "Project" : {
-                   "Find in Files" : {
+               "Project": {
+                   "Find in Files": {
                        position: 300,
-                       "Ignore these files" : {
+                       "Ignore these files": {
                            name: "txtPref",
                            type: "textarea",
                            width: 150,
@@ -58,7 +58,7 @@ define(function(require, exports, module) {
                            rowheight: 155,
                            position: 1000
                        },
-                       "Maximum number of files to search (in 1000)" : {
+                       "Maximum number of files to search (in 1000)": {
                             type: "spinner",
                             path: "project/find.nak/@searchLimit",
                             min: "20",
@@ -69,9 +69,9 @@ define(function(require, exports, module) {
                }
             }, plugin);
             
-            settings.on("read", function(){
+            settings.on("read", function() {
                 if (!settings.getBool("state/nak/@installed")) {
-                    fs.writeFile(MAIN_IGNORE, TEMPLATE, function(){
+                    fs.writeFile(MAIN_IGNORE, TEMPLATE, function() {
                         settings.set("state/nak/@installed", true);
                     });
                 }
@@ -85,7 +85,7 @@ define(function(require, exports, module) {
                 var ta = txtPref.lastChild;
                 
                 ta.on("afterchange", function(e) {
-                    fs.writeFile(MAIN_IGNORE, e.value, function(){});
+                    fs.writeFile(MAIN_IGNORE, e.value, function() {});
                 });
                 
                 fs.readFile(MAIN_IGNORE, function(err, data) {
@@ -106,12 +106,12 @@ define(function(require, exports, module) {
                 settings.getNumber("project/find.nak/@searchLimit") * 1000);
         }
         
-        function resolvePaths(args){
+        function resolvePaths(args) {
             if (!args.startPaths.length)
                 return;
             
             args.path = args.path.replace(/\/?$/, "/");
-            args.startPaths = args.startPaths.map(function(p){ 
+            args.startPaths = args.startPaths.map(function(p) { 
                 return p.replace(/^~?\//, function(m) {
                     return m.length === 2 ? c9.home : args.path;
                 });
@@ -124,11 +124,11 @@ define(function(require, exports, module) {
                 + args.startPaths.map(util.escapeRegExp).join("|") + ").+$");
             
             args.startPaths = args.startPaths
-              .filter(function(p){ return !re.test(p); });
+              .filter(function(p) { return !re.test(p); });
         }
         
         function assembleFilelistCommand(options) {
-            var args = {list: true};
+            var args = { list: true };
             
             args.pathToNakignore = options.local
                 ? MAIN_IGNORE
@@ -219,7 +219,7 @@ define(function(require, exports, module) {
         }
         
         function list(options, callback) {
-            if (!installer.isInstalled("c9.ide.find", function(){
+            if (!installer.isInstalled("c9.ide.find", function() {
                 list(options, callback);
             })) return;
             
@@ -261,7 +261,7 @@ define(function(require, exports, module) {
         }
         
         function find(options, callback) {
-            if (!installer.isInstalled("c9.ide.find", function(){
+            if (!installer.isInstalled("c9.ide.find", function() {
                 find(options, callback);
             })) return;
             
@@ -302,11 +302,11 @@ define(function(require, exports, module) {
         
         /***** Lifecycle *****/
         
-        plugin.on("load", function(){
+        plugin.on("load", function() {
             load();
         });
         
-        plugin.on("unload", function(){
+        plugin.on("unload", function() {
             loaded = false;
         });
         

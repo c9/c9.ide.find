@@ -96,7 +96,7 @@ define(function(require, exports, module) {
                         _.cached = _.cached.trim().replace(/^\/*/gm, "/");
                     }
                     
-                    needsBuffer.forEach(function(cb){ cb(err, _.cached); });
+                    needsBuffer.forEach(function(cb) { cb(err, _.cached); });
                 }
             });
         }
@@ -133,10 +133,10 @@ define(function(require, exports, module) {
         
         /***** Lifecycle *****/
         
-        plugin.on("load", function(){
+        plugin.on("load", function() {
 
         });
-        plugin.on("unload", function(){
+        plugin.on("unload", function() {
             
         });
         
@@ -177,7 +177,7 @@ define(function(require, exports, module) {
             /**
              * @ignore
              */
-            get basePath(){ return basePath; },
+            get basePath() { return basePath; },
             
             /**
              * Retrieves a list of files and lines that match a string or pattern

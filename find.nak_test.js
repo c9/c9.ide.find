@@ -59,7 +59,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
         describe('find', function() {
             this.timeout(30000);
             
-            describe("getFileList", function(){
+            describe("getFileList", function() {
                 var path = "/list";
                 var basePath = "/list";
                 
@@ -102,7 +102,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
             });
-            describe("findFiles", function(){
+            describe("findFiles", function() {
                 var options1 = {
                     query: "sriracha",
                     pattern: "",
@@ -137,7 +137,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                 });
             }
             
-            describe("list", function(){
+            describe("list", function() {
                 var base = baseProc + "/list";
                 var basePath = base;
                 var path = "/";
@@ -146,7 +146,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                 var options2 = { hidden: false, base: base, path: path };
                 var options3 = { path: "doesnotexist", hidden: true, base: base };
             
-                it("should get filelist, including hidden files and binaries",  function(done) {
+                it("should get filelist, including hidden files and binaries", function(done) {
                     finder.list(options1, function(err, stream) {
                         buffer(stream, function(results) {
                             Assert.equal(!err, true);
@@ -161,7 +161,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
             
-                it("should get filelist, without hidden files",  function(done) {
+                it("should get filelist, without hidden files", function(done) {
                     finder.list(options2, function(err, stream) {
                         buffer(stream, function(results) {
                             Assert.equal(!err, true);
@@ -174,7 +174,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
             
-                it("should return an empty list when a path does not exist",  function(done) {
+                it("should return an empty list when a path does not exist", function(done) {
                     finder.list(options3, function(err, stream) {
                         buffer(stream, function(results) {
                             Assert.equal(results.trim(), "");
@@ -183,7 +183,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
             });
-            describe("find", function(){
+            describe("find", function() {
                 var base = baseProc + "/find";
                 var basePath = base;
                 var path = "";
@@ -268,7 +268,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     hidden: true
                 };
                     
-                it("should find matches without regexp, case-sensitive OFF and word boundaries OFF",  function(done) {
+                it("should find matches without regexp, case-sensitive OFF and word boundaries OFF", function(done) {
                     finder.find(options1, function(err, stream) {
                         buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
@@ -280,7 +280,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
             
-                it("should find matches without regexp, case-sensitive ON and word boundaries OFF",  function(done) {
+                it("should find matches without regexp, case-sensitive ON and word boundaries OFF", function(done) {
                     finder.find(options2, function(err, stream) {
                         buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
@@ -293,7 +293,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
             
-                it("should find matches without regexp, case-sensitive OFF and word boundaries ON",  function(done) {
+                it("should find matches without regexp, case-sensitive OFF and word boundaries ON", function(done) {
                     finder.find(options3, function(err, stream) {
                         buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
@@ -306,7 +306,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
             
-                it("should find matches with a regexp, case-sensitive OFF",  function(done) {
+                it("should find matches with a regexp, case-sensitive OFF", function(done) {
                     finder.find(options4, function(err, stream) {
                         buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
@@ -319,7 +319,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
                 
-                it("should find matches with a regexp, case-sensitive ON, including the default .agignore file, and hidden files",  function(done) {
+                it("should find matches with a regexp, case-sensitive ON, including the default .agignore file, and hidden files", function(done) {
                     finder.find(options5, function(err, stream) {
                         buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
@@ -332,7 +332,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
              
-                it("should find matches without regexp, only two file types, and no hidden files (even if they contain the string)",  function(done) {
+                it("should find matches without regexp, only two file types, and no hidden files (even if they contain the string)", function(done) {
                     finder.find(options6, function(err, stream) {
                         buffer(stream, function(results, data) {
                             Assert.equal(!err, true);
@@ -346,7 +346,7 @@ require(["lib/architect/architect", "lib/chai/chai", "/vfs-root"],
                     });
                 });
             
-                it("should find matches without regexp, excluding txt files",  function(done) {
+                it("should find matches without regexp, excluding txt files", function(done) {
                     finder.find(options7, function(err, stream) {
                         buffer(stream, function(results, data) {
                             Assert.equal(!err, true);

@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     
-module.exports = function(session, options){
+module.exports = function(session, options) {
     session.install({
         "name": "Nak",
         "description": "Fast file searches for Cloud9",
